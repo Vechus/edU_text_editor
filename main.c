@@ -23,6 +23,7 @@ typedef struct txt_line_s {
 }txt_line_t;
 
 typedef struct lines_stack_s{
+    unsigned int index;
     unsigned long int size;
     txt_line_t** lines;
 }lines_stack_t;
@@ -32,8 +33,13 @@ typedef struct cmd_stack_node_s{
     struct cmd_stack_node_s* next;
 }cmd_stack_node_t;
 
+typedef struct del_list_node_s{
+    lines_stack_t* linesStack;
+    struct del_list_node_s* next;
+}del_list_node_t;
 
-int read_int() {
+
+/*int read_int() {
     char c = getchar_unlocked();
     while(c<'0' || c>'9') c = getchar_unlocked();
     int ret = 0;
@@ -42,7 +48,7 @@ int read_int() {
         c = getchar_unlocked();
     }
     return ret;
-}
+}*/
 
 void debug_print_cmd(cmd* c) {
     enum cmd_type t = c->type;
@@ -56,6 +62,7 @@ void debug_print_cmd(cmd* c) {
 }
 
 void debug_print_lines_stack(lines_stack_t* linesStack) {
+    printf("----------------\n");
     for(int i = 0; i < linesStack->size; i++) {
         if(linesStack->lines[i] == NULL) continue;
         if(linesStack->lines[i]->next != NULL) {
@@ -71,6 +78,7 @@ void debug_print_lines_stack(lines_stack_t* linesStack) {
             printf("%s\n", linesStack->lines[i]->content);
         }
     }
+    printf("----------------\n");
 }
 
 void debug_print_cmd_stack(cmd_stack_node_t* cmdStack) {
@@ -135,6 +143,30 @@ void handle_print(lines_stack_t* linesStack, unsigned long int from, unsigned lo
             x++;
         }
     }
+}
+
+void handle_delete(lines_stack_t* linesStack, del_list_node_t* delStack, unsigned long int from, unsigned long int to) {
+    del_list_node_t* new_tmp;
+    register unsigned long int delta = (to < linesStack->size ? to : linesStack->size) - from + 1;
+    new_tmp = (del_list_node_t*) malloc(sizeof(del_list_node_t));
+    new_tmp->next = delStack;
+    new_tmp->linesStack = (lines_stack_t*) malloc(sizeof(lines_stack_t));
+    new_tmp->linesStack->index = from;
+    new_tmp->linesStack->lines = (txt_line_t**) malloc((delta) * sizeof(txt_line_t*));
+    new_tmp->linesStack->size = delta;
+    // copy sub array into the new array
+    memcpy(new_tmp->linesStack->lines, linesStack->lines + (from - 1), delta * sizeof(txt_line_t*));
+    delStack = new_tmp;
+    // resize linesStack
+    for(unsigned long int i = from - 1; i + delta < linesStack->size; i++) {
+        linesStack->lines[i] = linesStack->lines[i + delta];
+    }
+    linesStack->lines = (txt_line_t **) realloc(linesStack->lines, (linesStack->size - delta + 1) * sizeof(txt_line_t*));
+    linesStack->size = linesStack->size - delta;
+#ifdef DEBUG
+    debug_print_lines_stack(new_tmp->linesStack);
+    debug_print_lines_stack(linesStack);
+#endif
 }
 
 cmd* parse_cmd() {
@@ -202,6 +234,7 @@ int main() {
     char* ptr;
     // all lines with history
     lines_stack_t* linesStack;
+    del_list_node_t* delList = NULL;
     // command history
     cmd_stack_node_t* cmdStack;
 
@@ -211,6 +244,7 @@ int main() {
     cmdStack->next = NULL;
 
     linesStack = (lines_stack_t *)malloc(sizeof(lines_stack_t));
+    linesStack->index = 0;
     linesStack->lines = (txt_line_t **)malloc(INIT_LINES_SIZE * sizeof(txt_line_t*));
     linesStack->size = INIT_LINES_SIZE;
 
@@ -227,6 +261,9 @@ int main() {
                 break;
             case PRINT:
                 handle_print(linesStack, command->args[0], command->args[1]);
+                break;
+            case DELETE:
+                handle_delete(linesStack, delList, command->args[0], command->args[1]);
                 break;
             default:
                 break;
