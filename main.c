@@ -7,8 +7,10 @@
 
 #define INPUT_MAX_LENGTH 1024
 #define INIT_LINES_SIZE 2
+#define DEBUG 1
 
-enum cmd_type {CHANGE, DELETE, PRINT, UNDO, REDO, QUIT};
+// commands in enum (BOTTOM is an auxiliary command that represents the bottom of the stack)
+enum cmd_type {CHANGE, DELETE, PRINT, UNDO, REDO, QUIT, BOTTOM};
 
 typedef struct {
     enum cmd_type type;
@@ -20,10 +22,6 @@ typedef struct txt_line_s {
     struct txt_line_s* next;
 }txt_line_t;
 
-/*typedef struct line_head_s {
-    txt_line_t* line;
-}line_head_t;*/
-
 typedef struct lines_stack_s{
     unsigned long int size;
     txt_line_t** lines;
@@ -34,6 +32,17 @@ typedef struct cmd_stack_node_s{
     struct cmd_stack_node_s* next;
 }cmd_stack_node_t;
 
+
+int read_int() {
+    char c = getchar_unlocked();
+    while(c<'0' || c>'9') c = getchar_unlocked();
+    int ret = 0;
+    while(c>='0' && c<='9') {
+        ret = 10 * ret + c - 48;
+        c = getchar_unlocked();
+    }
+    return ret;
+}
 
 void debug_print_cmd(cmd* c) {
     enum cmd_type t = c->type;
@@ -54,7 +63,7 @@ void debug_print_lines_stack(lines_stack_t* linesStack) {
             printf("%s -> ", tmp->content);
             tmp = tmp->next;
             while(tmp != NULL) {
-                printf("%s; ", tmp->content);
+                printf("\t%s; ", tmp->content);
                 tmp = tmp->next;
             }
             printf("\n");
@@ -67,7 +76,7 @@ void debug_print_lines_stack(lines_stack_t* linesStack) {
 void debug_print_cmd_stack(cmd_stack_node_t* cmdStack) {
     cmd_stack_node_t* tmp = cmdStack;
     printf("Commands: \n");
-    while(tmp != NULL) {
+    while(tmp->command->type != BOTTOM) {
         debug_print_cmd(tmp->command);
         tmp = tmp->next;
     }
@@ -95,12 +104,13 @@ void handle_change(lines_stack_t* linesStack, cmd *command) {
 
     if(command->args[1] > linesStack->size) {
         linesStack->lines = (txt_line_t **)realloc(linesStack->lines, (command->args[1] + 1) * sizeof(txt_line_t*));
-        linesStack->size = command->args[1] + 1;
+        linesStack->size = command->args[1];
     }
 
     for(unsigned long int i = command->args[0] - 1; i <= command->args[1] - 1; i++) {
-        if(linesStack->lines[i] == NULL)
+        if(linesStack->lines[i] == NULL) {
             linesStack->lines[i] = (txt_line_t *)malloc(sizeof(txt_line_t));
+        }
         fgets(buff, INPUT_MAX_LENGTH, stdin);
         input = (char *)malloc(strlen(buff) * sizeof(char));
         strcpy(input, buff);
@@ -111,66 +121,77 @@ void handle_change(lines_stack_t* linesStack, cmd *command) {
     getchar_unlocked();
 }
 
+void handle_print(lines_stack_t* linesStack, unsigned long int from, unsigned long int to) {
+    unsigned long int delta = to - from;
+    int count = 0;
+    unsigned long int x = from - 1;
+    while(count < delta) {
+        if(x > linesStack->size - 1) {
+            fputs(".\n", stdout);
+            count++;
+        } else {
+            fputs(linesStack->lines[x]->content, stdout);
+            count++;
+            x++;
+        }
+    }
+}
+
 cmd* parse_cmd() {
-    char c;
+    char c, t;
     int arg1 = 0, arg2 = 0;
     cmd *ret = (cmd*) malloc(sizeof(cmd));
     bool a1 = false;
-    c = getchar_unlocked();
+    t = getchar_unlocked();
     int i = 0;
-    while(c != '\n') {
-        if(a1 == false && isdigit(c)) {
-            arg1 += (int) (c - 48) * (int) pow(10, i);
-            i++;
-            c = getchar_unlocked();
-            continue;
-        } else if(isdigit(c)) {
-            arg2 += (int) (c - 48) * (int) pow(10, i);
-            i++;
-            c = getchar_unlocked();
-            continue;
-        }
-        switch (c) {
-            case ',':
-                a1 = true;
-                i = 0;
-                break;
-            case 'q':
-                ret->type = QUIT;
-                break;
-            case 'u':
-                ret->type = UNDO;
-               //ret->args = (unsigned long int*) malloc(sizeof(int));
-                ret->args[0] = arg1;
-                break;
-            case 'r':
-                ret->type = REDO;
-                //ret->args = (unsigned long int*) malloc(sizeof(int));
-                ret->args[0] = arg1;
-                break;
-            case 'c':
-                ret->type = CHANGE;
-                //ret->args = (unsigned long int*) malloc(2 * sizeof(int));
-                ret->args[0] = arg1;
-                ret->args[1] = arg2;
-                break;
-            case 'p':
-                ret->type = PRINT;
-                //ret->args = (unsigned long int*) malloc(2 * sizeof(int));
-                ret->args[0] = arg1;
-                ret->args[1] = arg2;
-                break;
-            case 'd':
-                ret->type = DELETE;
-                //ret->args = (unsigned long int*) malloc(2 * sizeof(int));
-                ret->args[0] = arg1;
-                ret->args[1] = arg2;
-                break;
-            default:
-                puts("\nInvalid command format.\n");
-                break;
-        }
+
+    //while(c<'0' || c>'9') c = getchar_unlocked();
+    c = getchar_unlocked();
+    while(c>='0' && c<='9') {
+        if(a1 == false) arg1 = 10 * arg1 + c - 48;
+        else arg2 = 10 * arg2 + c - 48;
         c = getchar_unlocked();
+        if(c == '\n') break;
+        else if(c == ',') {
+            a1 = true;
+            c = getchar_unlocked();
+        }
+    }
+    switch (t) {
+        case 'q':
+            ret->type = QUIT;
+            break;
+        case 'u':
+            ret->type = UNDO;
+            //ret->args = (unsigned long int*) malloc(sizeof(int));
+            ret->args[0] = arg1;
+            break;
+        case 'r':
+            ret->type = REDO;
+            //ret->args = (unsigned long int*) malloc(sizeof(int));
+            ret->args[0] = arg1;
+            break;
+        case 'c':
+            ret->type = CHANGE;
+            //ret->args = (unsigned long int*) malloc(2 * sizeof(int));
+            ret->args[0] = arg1;
+            ret->args[1] = arg2;
+            break;
+        case 'p':
+            ret->type = PRINT;
+            //ret->args = (unsigned long int*) malloc(2 * sizeof(int));
+            ret->args[0] = arg1;
+            ret->args[1] = arg2;
+            break;
+        case 'd':
+            ret->type = DELETE;
+            //ret->args = (unsigned long int*) malloc(2 * sizeof(int));
+            ret->args[0] = arg1;
+            ret->args[1] = arg2;
+            break;
+        default:
+            puts("\nInvalid command format.\n");
+            break;
     }
     return ret;
 }
@@ -185,23 +206,27 @@ int main() {
     cmd_stack_node_t* cmdStack;
 
     cmdStack = (cmd_stack_node_t *)malloc(sizeof(cmd_stack_node_t));
+    cmdStack->command = (cmd*) malloc(sizeof(cmd));
+    cmdStack->command->type = BOTTOM;
     cmdStack->next = NULL;
 
     linesStack = (lines_stack_t *)malloc(sizeof(lines_stack_t));
     linesStack->lines = (txt_line_t **)malloc(INIT_LINES_SIZE * sizeof(txt_line_t*));
     linesStack->size = INIT_LINES_SIZE;
-    /*for(int i = 0; i < INIT_LINES_SIZE; i ++) {
-        linesStack->lines[i] = (txt_line_t *)malloc(sizeof(txt_line_t));
-    }*/
 
-    printf("DEBUG\n");
+    #ifdef DEBUG
+        printf("DEBUG\n");
+    #endif
 
     command = parse_cmd();
-    cmdStack->command = command;
+    //cmdStack->command = command;
     while(command->type != QUIT) {
         switch (command->type) {
             case CHANGE:
                 handle_change(linesStack, command);
+                break;
+            case PRINT:
+                handle_print(linesStack, command->args[0], command->args[1]);
                 break;
             default:
                 break;
@@ -209,7 +234,9 @@ int main() {
         push_cmd(&cmdStack, command);
         command = parse_cmd();
     }
-    debug_print_cmd_stack(cmdStack);
-    debug_print_lines_stack(linesStack);
+    #ifdef DEBUG
+        debug_print_cmd_stack(cmdStack);
+        debug_print_lines_stack(linesStack);
+    #endif
     return 0;
 }
