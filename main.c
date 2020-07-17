@@ -133,8 +133,8 @@ void handle_print(lines_stack_t* linesStack, unsigned long int from, unsigned lo
     unsigned long int delta = to - from;
     int count = 0;
     unsigned long int x = from - 1;
-    while(count < delta) {
-        if(x > linesStack->size - 1) {
+    while(count < delta + 1) {
+        if(x >= linesStack->size) {
             fputs(".\n", stdout);
             count++;
         } else {
@@ -161,11 +161,38 @@ void handle_delete(lines_stack_t* linesStack, del_list_node_t* delStack, unsigne
     for(unsigned long int i = from - 1; i + delta < linesStack->size; i++) {
         linesStack->lines[i] = linesStack->lines[i + delta];
     }
-    linesStack->lines = (txt_line_t **) realloc(linesStack->lines, (linesStack->size - delta + 1) * sizeof(txt_line_t*));
+    linesStack->lines = (txt_line_t **) realloc(linesStack->lines, (linesStack->size - delta) * sizeof(txt_line_t*));
     linesStack->size = linesStack->size - delta;
 #ifdef DEBUG
+    printf("DEBUG DELETE:\n");
     debug_print_lines_stack(new_tmp->linesStack);
     debug_print_lines_stack(linesStack);
+#endif
+}
+
+void handle_undo(lines_stack_t* linesStack, cmd_stack_node_t** cmdStack, cmd_stack_node_t** undoStack, unsigned long int steps) {
+    //cmd_stack_node_t* curr_cmd;
+    cmd_stack_node_t* tmp;
+    unsigned long int count = 0;
+    //curr_cmd = cmdStack;
+    while((*cmdStack)->command->type != BOTTOM && count < steps) {
+        // stack the cmds to undo and undo them
+        // push undoStack
+        tmp = *cmdStack;
+        *cmdStack = (*cmdStack)->next;
+        tmp->next = *undoStack;
+        *undoStack = tmp;
+        count++;
+    }
+#ifdef DEBUG
+    printf("--------------\n");
+    printf("DEBUG UNDO:\n");
+    printf("UNDO STACK: \n");
+    debug_print_cmd_stack(*undoStack);
+    printf("--------------\n");
+    printf("CMD STACK:\n");
+    debug_print_cmd_stack(*cmdStack);
+    printf("--------------\n");
 #endif
 }
 
@@ -237,11 +264,17 @@ int main() {
     del_list_node_t* delList = NULL;
     // command history
     cmd_stack_node_t* cmdStack;
+    cmd_stack_node_t* undoStack = NULL;
 
     cmdStack = (cmd_stack_node_t *)malloc(sizeof(cmd_stack_node_t));
     cmdStack->command = (cmd*) malloc(sizeof(cmd));
     cmdStack->command->type = BOTTOM;
     cmdStack->next = NULL;
+
+    undoStack = (cmd_stack_node_t *)malloc(sizeof(cmd_stack_node_t));
+    undoStack->command = (cmd*) malloc(sizeof(cmd));
+    undoStack->command->type = BOTTOM;
+    undoStack->next = NULL;
 
     linesStack = (lines_stack_t *)malloc(sizeof(lines_stack_t));
     linesStack->index = 0;
@@ -253,26 +286,30 @@ int main() {
     #endif
 
     command = parse_cmd();
-    //cmdStack->command = command;
     while(command->type != QUIT) {
         switch (command->type) {
             case CHANGE:
                 handle_change(linesStack, command);
+                push_cmd(&cmdStack, command);
                 break;
             case PRINT:
                 handle_print(linesStack, command->args[0], command->args[1]);
                 break;
             case DELETE:
                 handle_delete(linesStack, delList, command->args[0], command->args[1]);
+                push_cmd(&cmdStack, command);
+                break;
+            case UNDO:
+                handle_undo(linesStack, &cmdStack, &undoStack, command->args[0]);
                 break;
             default:
                 break;
         }
-        push_cmd(&cmdStack, command);
         command = parse_cmd();
     }
     #ifdef DEBUG
         debug_print_cmd_stack(cmdStack);
+        debug_print_cmd_stack(undoStack);
         debug_print_lines_stack(linesStack);
     #endif
     return 0;
