@@ -30,6 +30,7 @@ typedef struct lines_stack_s{
 
 typedef struct cmd_stack_node_s{
     cmd* command;
+    long int size;
     struct cmd_stack_node_s* next;
 }cmd_stack_node_t;
 
@@ -83,7 +84,7 @@ void debug_print_lines_stack(lines_stack_t* linesStack) {
 
 void debug_print_cmd_stack(cmd_stack_node_t* cmdStack) {
     cmd_stack_node_t* tmp = cmdStack;
-    printf("Commands: \n");
+    printf("Commands: size = %ld\n", cmdStack->size);
     while(tmp->command->type != BOTTOM) {
         debug_print_cmd(tmp->command);
         tmp = tmp->next;
@@ -95,6 +96,7 @@ void push_cmd(cmd_stack_node_t** cmdStack, cmd* command) {
     tmp->command = command;
     tmp->next = *cmdStack;
     *cmdStack = tmp;
+    (*cmdStack)->size++;
 }
 
 void push_line(txt_line_t** stack, char* text) {
@@ -176,12 +178,14 @@ void handle_undo(lines_stack_t* linesStack, cmd_stack_node_t** cmdStack, cmd_sta
     unsigned long int count = 0;
     //curr_cmd = cmdStack;
     while((*cmdStack)->command->type != BOTTOM && count < steps) {
-        // stack the cmds to undo and undo them
-        // push undoStack
+        // stack the commands to undo and undo them
+        // push undoStack and pop cmdStack
         tmp = *cmdStack;
         *cmdStack = (*cmdStack)->next;
+        (*cmdStack)->size--;
         tmp->next = *undoStack;
         *undoStack = tmp;
+        (*undoStack)->size++;
         count++;
     }
 #ifdef DEBUG
@@ -259,6 +263,8 @@ int main() {
     cmd* command;
     char* dot_ptr = ".";
     char* ptr;
+    unsigned long int equivalent_undo = 0;
+    unsigned long int equivalent_redo = 0;
     // all lines with history
     lines_stack_t* linesStack;
     del_list_node_t* delList = NULL;
@@ -269,11 +275,13 @@ int main() {
     cmdStack = (cmd_stack_node_t *)malloc(sizeof(cmd_stack_node_t));
     cmdStack->command = (cmd*) malloc(sizeof(cmd));
     cmdStack->command->type = BOTTOM;
+    cmdStack->size = 0;
     cmdStack->next = NULL;
 
     undoStack = (cmd_stack_node_t *)malloc(sizeof(cmd_stack_node_t));
     undoStack->command = (cmd*) malloc(sizeof(cmd));
     undoStack->command->type = BOTTOM;
+    undoStack->size = 0;
     undoStack->next = NULL;
 
     linesStack = (lines_stack_t *)malloc(sizeof(lines_stack_t));
@@ -289,18 +297,40 @@ int main() {
     while(command->type != QUIT) {
         switch (command->type) {
             case CHANGE:
+                if(equivalent_undo > 0 || equivalent_redo > 0) {
+                    // handle remaining undo/redo (and purge structure)
+                }
                 handle_change(linesStack, command);
                 push_cmd(&cmdStack, command);
                 break;
             case PRINT:
+                if(equivalent_undo > 0 || equivalent_redo > 0) {
+                    // handle remaining undo/redo
+
+                }
                 handle_print(linesStack, command->args[0], command->args[1]);
                 break;
             case DELETE:
+                if(equivalent_undo > 0 || equivalent_redo > 0) {
+                    // handle remaining undo/redo (and purge structure)
+                }
                 handle_delete(linesStack, delList, command->args[0], command->args[1]);
                 push_cmd(&cmdStack, command);
                 break;
             case UNDO:
+                equivalent_undo += command->args[0];
                 handle_undo(linesStack, &cmdStack, &undoStack, command->args[0]);
+                break;
+            case REDO:
+                if(equivalent_undo > 0) {
+                    if(equivalent_undo - command->args[0] >= 0) {
+                        equivalent_undo -= command->args[0];
+                    } else {
+                        equivalent_undo = 0;
+                        equivalent_redo = command->args[0] - equivalent_undo;
+                    }
+                }
+                else if(undoStack->size > 0) equivalent_redo += command->args[0];
                 break;
             default:
                 break;
