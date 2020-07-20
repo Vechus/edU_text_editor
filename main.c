@@ -326,7 +326,9 @@ int main() {
                 } else {
                     equivalent_undo = 0;
                 }
+#ifdef DEBUG
                 printf("EQ_UN:: %lu equivalent undo; \n", equivalent_undo);
+#endif
                 break;
             default:
                 break;
