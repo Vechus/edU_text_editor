@@ -14,7 +14,7 @@ enum cmd_type {CHANGE, DELETE, PRINT, UNDO, REDO, QUIT, BOTTOM};
 
 typedef struct {
     enum cmd_type type;
-    unsigned long int args[2];
+    long int args[2];
 }cmd;
 
 typedef struct txt_line_s {
@@ -117,7 +117,7 @@ void handle_change(lines_stack_t* linesStack, cmd *command) {
         linesStack->size = command->args[1];
     }
 
-    for(unsigned long int i = command->args[0] - 1; i <= command->args[1] - 1; i++) {
+    for(long int i = command->args[0] - 1; i <= command->args[1] - 1; i++) {
         if(linesStack->lines[i] == NULL) {
             linesStack->lines[i] = (txt_line_t *)malloc(sizeof(txt_line_t));
         }
@@ -131,10 +131,10 @@ void handle_change(lines_stack_t* linesStack, cmd *command) {
     getchar_unlocked();
 }
 
-void handle_print(lines_stack_t* linesStack, unsigned long int from, unsigned long int to) {
-    unsigned long int delta = to - from;
+void handle_print(lines_stack_t* linesStack, long int from, long int to) {
+    long int delta = to - from;
     int count = 0;
-    unsigned long int x = from - 1;
+    long int x = from - 1;
     while(count < delta + 1) {
         if(x >= linesStack->size) {
             fputs(".\n", stdout);
@@ -147,7 +147,7 @@ void handle_print(lines_stack_t* linesStack, unsigned long int from, unsigned lo
     }
 }
 
-void handle_delete(lines_stack_t* linesStack, del_list_node_t* delStack, unsigned long int from, unsigned long int to) {
+void handle_delete(lines_stack_t* linesStack, del_list_node_t* delStack, long int from, long int to) {
     del_list_node_t* new_tmp;
     register unsigned long int delta = (to < linesStack->size ? to : linesStack->size) - from + 1;
     new_tmp = (del_list_node_t*) malloc(sizeof(del_list_node_t));
@@ -160,7 +160,7 @@ void handle_delete(lines_stack_t* linesStack, del_list_node_t* delStack, unsigne
     memcpy(new_tmp->linesStack->lines, linesStack->lines + (from - 1), delta * sizeof(txt_line_t*));
     delStack = new_tmp;
     // resize linesStack
-    for(unsigned long int i = from - 1; i + delta < linesStack->size; i++) {
+    for(long int i = from - 1; i + delta < linesStack->size; i++) {
         linesStack->lines[i] = linesStack->lines[i + delta];
     }
     linesStack->lines = (txt_line_t **) realloc(linesStack->lines, (linesStack->size - delta) * sizeof(txt_line_t*));
@@ -172,10 +172,10 @@ void handle_delete(lines_stack_t* linesStack, del_list_node_t* delStack, unsigne
 #endif
 }
 
-void handle_undo(lines_stack_t* linesStack, cmd_stack_node_t** cmdStack, cmd_stack_node_t** undoStack, unsigned long int steps) {
+void handle_undo(lines_stack_t* linesStack, cmd_stack_node_t** cmdStack, cmd_stack_node_t** undoStack, long int steps) {
     //cmd_stack_node_t* curr_cmd;
     cmd_stack_node_t* tmp;
-    unsigned long int count = 0;
+    long int count = 0;
     //curr_cmd = cmdStack;
     while((*cmdStack)->command->type != BOTTOM && count < steps) {
         // stack the commands to undo and undo them
@@ -226,29 +226,29 @@ cmd* parse_cmd() {
             break;
         case 'u':
             ret->type = UNDO;
-            //ret->args = (unsigned long int*) malloc(sizeof(int));
+            //ret->args = (long int*) malloc(sizeof(int));
             ret->args[0] = arg1;
             break;
         case 'r':
             ret->type = REDO;
-            //ret->args = (unsigned long int*) malloc(sizeof(int));
+            //ret->args = (long int*) malloc(sizeof(int));
             ret->args[0] = arg1;
             break;
         case 'c':
             ret->type = CHANGE;
-            //ret->args = (unsigned long int*) malloc(2 * sizeof(int));
+            //ret->args = (long int*) malloc(2 * sizeof(int));
             ret->args[0] = arg1;
             ret->args[1] = arg2;
             break;
         case 'p':
             ret->type = PRINT;
-            //ret->args = (unsigned long int*) malloc(2 * sizeof(int));
+            //ret->args = (long int*) malloc(2 * sizeof(int));
             ret->args[0] = arg1;
             ret->args[1] = arg2;
             break;
         case 'd':
             ret->type = DELETE;
-            //ret->args = (unsigned long int*) malloc(2 * sizeof(int));
+            //ret->args = (long int*) malloc(2 * sizeof(int));
             ret->args[0] = arg1;
             ret->args[1] = arg2;
             break;
@@ -263,8 +263,7 @@ int main() {
     cmd* command;
     char* dot_ptr = ".";
     char* ptr;
-    unsigned long int equivalent_undo = 0;
-    unsigned long int equivalent_redo = 0;
+    long int equivalent_undo = 0;
     // all lines with history
     lines_stack_t* linesStack;
     del_list_node_t* delList = NULL;
@@ -297,21 +296,21 @@ int main() {
     while(command->type != QUIT) {
         switch (command->type) {
             case CHANGE:
-                if(equivalent_undo > 0 || equivalent_redo > 0) {
+                if(equivalent_undo > 0) {
                     // handle remaining undo/redo (and purge structure)
                 }
                 handle_change(linesStack, command);
                 push_cmd(&cmdStack, command);
                 break;
             case PRINT:
-                if(equivalent_undo > 0 || equivalent_redo > 0) {
+                if(equivalent_undo > 0) {
                     // handle remaining undo/redo
 
                 }
                 handle_print(linesStack, command->args[0], command->args[1]);
                 break;
             case DELETE:
-                if(equivalent_undo > 0 || equivalent_redo > 0) {
+                if(equivalent_undo > 0) {
                     // handle remaining undo/redo (and purge structure)
                 }
                 handle_delete(linesStack, delList, command->args[0], command->args[1]);
@@ -319,18 +318,15 @@ int main() {
                 break;
             case UNDO:
                 equivalent_undo += command->args[0];
-                handle_undo(linesStack, &cmdStack, &undoStack, command->args[0]);
+                //handle_undo(linesStack, &cmdStack, &undoStack, command->args[0]);
                 break;
             case REDO:
-                if(equivalent_undo > 0) {
-                    if(equivalent_undo - command->args[0] >= 0) {
-                        equivalent_undo -= command->args[0];
-                    } else {
-                        equivalent_undo = 0;
-                        equivalent_redo = command->args[0] - equivalent_undo;
-                    }
+                if(equivalent_undo - command->args[0] >= 0) {
+                    equivalent_undo -= command->args[0];
+                } else {
+                    equivalent_undo = 0;
                 }
-                else if(undoStack->size > 0) equivalent_redo += command->args[0];
+                printf("EQ_UN:: %lu equivalent undo; \n", equivalent_undo);
                 break;
             default:
                 break;
@@ -338,6 +334,7 @@ int main() {
         command = parse_cmd();
     }
     #ifdef DEBUG
+        printf("EQ_UN:: %lu equivalent undo; \n", equivalent_undo);
         debug_print_cmd_stack(cmdStack);
         debug_print_cmd_stack(undoStack);
         debug_print_lines_stack(linesStack);
