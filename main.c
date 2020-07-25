@@ -7,6 +7,7 @@
 
 #define INPUT_MAX_LENGTH 1024
 #define INIT_LINES_SIZE 2
+#define CAPACITY_CONST 100
 #define DEBUG 1
 
 // commands in enum (BOTTOM is an auxiliary command that represents the bottom of the stack)
@@ -20,11 +21,13 @@ typedef struct {
 typedef struct txt_line_s {
     char* content;
     struct txt_line_s* next;
+    struct txt_line_s* prev;
 }txt_line_t;
 
 typedef struct lines_stack_s{
     unsigned int index;
     unsigned long int size;
+    unsigned long int capacity;
     txt_line_t** lines;
 }lines_stack_t;
 
@@ -68,7 +71,7 @@ void debug_print_lines_stack(lines_stack_t* linesStack) {
         if(linesStack->lines[i] == NULL) continue;
         if(linesStack->lines[i]->next != NULL) {
             txt_line_t* tmp = linesStack->lines[i];
-            printf("%s -> ", tmp->content);
+            printf("%s <- %s -> ", (tmp->prev!=NULL)?tmp->prev->content:"(null)", tmp->content);
             tmp = tmp->next;
             while(tmp != NULL) {
                 printf("\t%s; ", tmp->content);
@@ -105,15 +108,21 @@ void push_line(txt_line_t** stack, char* text) {
     tmp->content = (char *)malloc(strlen(text) * sizeof(char));
     strcpy(tmp->content, text);
     tmp->next = *stack;
+    tmp->prev = (*stack != NULL) ? (*stack)->prev : NULL;
     *stack = tmp;
+}
+
+void rollback_line(txt_line_t** stack) {
+
 }
 
 void handle_change(lines_stack_t* linesStack, cmd *command) {
     char* input;
     char buff[INPUT_MAX_LENGTH];
 
-    if(command->args[1] > linesStack->size) {
+    if(command->args[1] > linesStack->capacity) {
         linesStack->lines = (txt_line_t **)realloc(linesStack->lines, (command->args[1] + 1) * sizeof(txt_line_t*));
+        linesStack->capacity = command->args[1] + 1;
         linesStack->size = command->args[1];
     }
 
@@ -163,8 +172,9 @@ void handle_delete(lines_stack_t* linesStack, del_list_node_t* delStack, long in
     for(long int i = from - 1; i + delta < linesStack->size; i++) {
         linesStack->lines[i] = linesStack->lines[i + delta];
     }
-    linesStack->lines = (txt_line_t **) realloc(linesStack->lines, (linesStack->size - delta) * sizeof(txt_line_t*));
+    linesStack->lines = (txt_line_t **) realloc(linesStack->lines, (linesStack->size - delta + CAPACITY_CONST) * sizeof(txt_line_t*));
     linesStack->size = linesStack->size - delta;
+    linesStack->capacity = linesStack->size - delta + CAPACITY_CONST;
 #ifdef DEBUG
     printf("DEBUG DELETE:\n");
     debug_print_lines_stack(new_tmp->linesStack);
@@ -172,7 +182,7 @@ void handle_delete(lines_stack_t* linesStack, del_list_node_t* delStack, long in
 #endif
 }
 
-void handle_undo(lines_stack_t* linesStack, cmd_stack_node_t** cmdStack, cmd_stack_node_t** undoStack, long int steps) {
+void handle_temp_undo(lines_stack_t* linesStack, cmd_stack_node_t** cmdStack, cmd_stack_node_t** undoStack, long int steps) {
     //cmd_stack_node_t* curr_cmd;
     cmd_stack_node_t* tmp;
     long int count = 0;
@@ -205,10 +215,8 @@ cmd* parse_cmd() {
     int arg1 = 0, arg2 = 0;
     cmd *ret = (cmd*) malloc(sizeof(cmd));
     bool a1 = false;
-    t = getchar_unlocked();
     int i = 0;
 
-    //while(c<'0' || c>'9') c = getchar_unlocked();
     c = getchar_unlocked();
     while(c>='0' && c<='9') {
         if(a1 == false) arg1 = 10 * arg1 + c - 48;
@@ -220,7 +228,8 @@ cmd* parse_cmd() {
             c = getchar_unlocked();
         }
     }
-    switch (t) {
+    t = getchar_unlocked(); // '\n'
+    switch (c) {
         case 'q':
             ret->type = QUIT;
             break;
@@ -261,8 +270,8 @@ cmd* parse_cmd() {
 
 int main() {
     cmd* command;
-    char* dot_ptr = ".";
-    char* ptr;
+    //char* dot_ptr = ".";
+    //char* ptr;
     long int equivalent_undo = 0;
     // all lines with history
     lines_stack_t* linesStack;
@@ -286,7 +295,8 @@ int main() {
     linesStack = (lines_stack_t *)malloc(sizeof(lines_stack_t));
     linesStack->index = 0;
     linesStack->lines = (txt_line_t **)malloc(INIT_LINES_SIZE * sizeof(txt_line_t*));
-    linesStack->size = INIT_LINES_SIZE;
+    linesStack->size = 0;
+    linesStack->capacity = INIT_LINES_SIZE;
 
     #ifdef DEBUG
         printf("DEBUG\n");
