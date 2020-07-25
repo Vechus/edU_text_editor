@@ -20,8 +20,8 @@ typedef struct {
 
 typedef struct txt_line_s {
     char* content;
-    struct txt_line_s* next;
-    struct txt_line_s* prev;
+    struct txt_line_s* right;
+    struct txt_line_s* left;
 }txt_line_t;
 
 typedef struct lines_stack_s{
@@ -43,17 +43,6 @@ typedef struct del_list_node_s{
 }del_list_node_t;
 
 
-/*int read_int() {
-    char c = getchar_unlocked();
-    while(c<'0' || c>'9') c = getchar_unlocked();
-    int ret = 0;
-    while(c>='0' && c<='9') {
-        ret = 10 * ret + c - 48;
-        c = getchar_unlocked();
-    }
-    return ret;
-}*/
-
 void debug_print_cmd(cmd* c) {
     enum cmd_type t = c->type;
     if(t==CHANGE||t==DELETE||t==PRINT) {
@@ -69,13 +58,13 @@ void debug_print_lines_stack(lines_stack_t* linesStack) {
     printf("----------------\n");
     for(int i = 0; i < linesStack->size; i++) {
         if(linesStack->lines[i] == NULL) continue;
-        if(linesStack->lines[i]->next != NULL) {
+        if(linesStack->lines[i]->right != NULL) {
             txt_line_t* tmp = linesStack->lines[i];
-            printf("%s <- %s -> ", (tmp->prev!=NULL)?tmp->prev->content:"(null)", tmp->content);
-            tmp = tmp->next;
+            printf("%s <- %s -> ", (tmp->left!=NULL)?tmp->left->content:"(null)", tmp->content);
+            tmp = tmp->right;
             while(tmp != NULL) {
                 printf("\t%s; ", tmp->content);
-                tmp = tmp->next;
+                tmp = tmp->right;
             }
             printf("\n");
         } else {
@@ -107,13 +96,23 @@ void push_line(txt_line_t** stack, char* text) {
     tmp = (txt_line_t *)malloc(sizeof(txt_line_t));
     tmp->content = (char *)malloc(strlen(text) * sizeof(char));
     strcpy(tmp->content, text);
-    tmp->next = *stack;
-    tmp->prev = (*stack != NULL) ? (*stack)->prev : NULL;
+    tmp->right = *stack;
+    tmp->left = (*stack != NULL) ? (*stack)->left : NULL;
     *stack = tmp;
 }
 
-void rollback_line(txt_line_t** stack) {
+// used for redo
+void slide_left_line(txt_line_t** stack) {
+    txt_line_t* tmp = *stack;
+    (*stack) = (*stack)->left;
+    (*stack)->right = tmp;
+}
 
+// used for undo
+void slide_right_line(txt_line_t** stack) {
+    txt_line_t* tmp = *stack;
+    (*stack) = (*stack)->right;
+    (*stack)->left = tmp;
 }
 
 void handle_change(lines_stack_t* linesStack, cmd *command) {
