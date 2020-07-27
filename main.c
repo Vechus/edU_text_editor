@@ -5,10 +5,10 @@
 #include <ctype.h>
 #include <math.h>
 
-#define INPUT_MAX_LENGTH 1024
+#define INPUT_MAX_LENGTH 1025
 #define INIT_LINES_SIZE 2
 #define CAPACITY_CONST 100
-#define DEBUG 1
+//#define DEBUG 1
 
 // commands in enum (BOTTOM is an auxiliary command that represents the bottom of the stack)
 enum cmd_type {CHANGE, DELETE, PRINT, UNDO, REDO, QUIT, BOTTOM};
@@ -94,8 +94,8 @@ void push_cmd(cmd_stack_node_t** cmdStack, cmd* command) {
 void push_line(txt_line_t** stack, char* text) {
     txt_line_t* tmp;
     tmp = (txt_line_t *)malloc(sizeof(txt_line_t));
-    tmp->content = (char *)malloc(strlen(text) * sizeof(char));
-    strcpy(tmp->content, text);
+    tmp->content = text;
+    //strcpy(tmp->content, text);
     tmp->right = *stack;
     tmp->left = (*stack != NULL) ? (*stack)->left : NULL;
     *stack = tmp;
@@ -120,17 +120,17 @@ void handle_change(lines_stack_t* linesStack, cmd *command) {
     char buff[INPUT_MAX_LENGTH];
 
     if(command->args[1] > linesStack->capacity) {
-        linesStack->lines = (txt_line_t **)realloc(linesStack->lines, (command->args[1] + 1) * sizeof(txt_line_t*));
-        linesStack->capacity = command->args[1] + 1;
-        linesStack->size = command->args[1];
+        linesStack->lines = (txt_line_t **)realloc(linesStack->lines, (command->args[1] + CAPACITY_CONST) * sizeof(txt_line_t*));
+        linesStack->capacity = command->args[1] + CAPACITY_CONST;
     }
+    if(command->args[1] > linesStack->size) linesStack->size = command->args[1];
 
     for(long int i = command->args[0] - 1; i <= command->args[1] - 1; i++) {
         if(linesStack->lines[i] == NULL) {
             linesStack->lines[i] = (txt_line_t *)malloc(sizeof(txt_line_t));
         }
         fgets(buff, INPUT_MAX_LENGTH, stdin);
-        input = (char *)malloc(strlen(buff) * sizeof(char));
+        input = (char *)malloc((strlen(buff) + 1) * sizeof(char));
         strcpy(input, buff);
         push_line(&(linesStack->lines[i]), input);
     }
@@ -293,7 +293,7 @@ int main() {
 
     linesStack = (lines_stack_t *)malloc(sizeof(lines_stack_t));
     linesStack->index = 0;
-    linesStack->lines = (txt_line_t **)malloc(INIT_LINES_SIZE * sizeof(txt_line_t*));
+    linesStack->lines = (txt_line_t **)calloc(INIT_LINES_SIZE, sizeof(txt_line_t*));
     linesStack->size = 0;
     linesStack->capacity = INIT_LINES_SIZE;
 
