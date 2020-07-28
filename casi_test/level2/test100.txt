@@ -1,0 +1,390 @@
+1,9d
+1,8c
+Roy: Nexus six.
+Sebastian: Ah, I knew it. 'Cause I do genetic design work for the
+Tyrell Corporation. There's some of me in you. Show me something.
+Roy: Like what?
+Sebastian: Like anything.
+Roy: We're not computers Sebastian, we're physical.
+Pris: I think, Sebastian, therefore I am.
+Roy: Very good Pris, now show him why.
+.
+6,12d
+5,13d
+1,10c
+Pris: Accelerated decrepitude.
+Sebastian: I don't know much about biomechanics, Roy, I wish I did.
+Roy: If we don't find help soon, Pris hasn't got long to live. We
+can't allow that. (pause) Is he good?
+Sebastian: Who?
+Roy: Your opponent.
+Sebastian: Oh, Dr. Tyrell? I've only beaten him once in chess. He's a
+genius. He designed you.
+Roy: Maybe he could help.
+Sebastian: I'd be happy to mention it to him.
+.
+2,4c
+Leon (video): Where I live.
+Holden (video): Nice place?
+Leon (video): Yeah, sure I guess--
+.
+9,9c
+Roy: Yes...
+.
+10,15p
+6,8d
+4,5p
+4,11d
+1,4d
+1,9d
+1,11d
+1,4d
+1,3c
+Street thing: Move on...
+Lady: Yeah what do you want?
+Deckard: Tsing tao. This enough?
+.
+1,11d
+1,8d
+1,5p
+1,5p
+1,6p
+1,11c
+Leon: Do you make up these questions, Mr. Holden, or do they write
+them down for you?
+Holden: The tortoise lays on its back, its belly baking in the hot sun
+beating its legs trying to turn itself over but it can't, not without
+your help, but you're not helping.
+Leon: What do you mean I'm not helping?
+Holden: I mean, you're not helping. Why is that Leon? (pause) They're
+just questions, Leon. In answer to your query, they're written down
+for me. It's a test, designed to provoke an emotional response.
+(pause) Shall we continue? Describe in single words, only the good
+things that come in to your mind about: your mother.
+.
+5,7d
+7,14c
+around. Bryant must have upped him to the Blade Runner unit. That
+gibberish he talked was city-speak, guttertalk, a mishmash of
+Japanese, Spanish, German, what have you. I didn't really need a
+translator. I knew the lingo, every good cop did. But I wasn't going
+to make it easier for him.
+Spinner: ...now on glide path, on course, over the landing threshold.
+[Bryant's office]
+Bryant: Hiya Deck.
+.
+4,10c
+Rachael: I trust you.
+Deckard: Rachael?
+[Deckard picks up paper unicorn.]
+Gaff (memory): Its too bad she won't live. But then again, who does?
+Deckard (voice-over): Gaff had been there, and let her live. Four
+years, he figured. He was wrong. Tyrell had told me Rachael was
+special: no termination date. I didn't know how long we had together,
+.
+4,5d
+10,10c
+F. Sebastian.
+.
+5,7c
+Zhora: For what?
+Deckard: For, uh, for holes.
+Zhora: Holes?
+.
+7,11p
+2,12c
+Sebastian: I've got some stuff inside. You want to come in?
+Pris: I was hoping you'd say that.
+[Pris and Sebastian enter building.]
+Pris: Do you live in this building all by yourself?
+Sebastian: Yeah, I live here pretty much alone right now. No housing
+shortage around here. Plenty of room for everybody. (pause)
+Pris: (cough).
+Sebastian: Watch out for the water.
+Pris: Must get lonely here J. F.
+Sebastian: Mmm... Not really. I make friends. They're toys. My friends
+are toys. I make them. It's a hobby. I'm a genetic designer. Do you
+.
+4,6c
+Roy: Tyrell corporation?
+Chew: He big boss. He genius. He design your mind, your brain.
+Roy: Ah, smart.
+.
+4,12d
+1,1c
+***
+.
+3,8d
+1,8c
+Sebastian: Well, you look beautiful.
+Pris: Thanks. (pause) How old are you?
+Sebastian: Twenty-five.
+Pris: What's you problem?
+Sebastian: Methuselah's syndrome.
+Pris: What's that?
+Sebastian: My glands. They grow old too fast.
+Pris: Is that why you're still on earth?
+.
+4,11d
+2,7d
+1,10d
+1,8c
+NOVEMBER, 2019
+Intercom: Next subject, Kowalski, Leon, engineer, waste-disposal,
+file- section, new employees, six days.
+Holden: (hears knock on door) Come in. (pause) Sit down.
+Leon: Care if I talk? I'm kind of nervous when I take tests.
+Holden: Uh, just please don't move.
+Leon: Oh, sorry. I already had an IQ test this year, I don't think
+I've ever had one of these-
+.
+3,12c
+Deckard: I don't know.
+Leon: My birthday is April 10, 2017. How long do I live?
+Deckard: Four years.
+Leon: More than you. Painful to live in fear, isn't it? Nothing is
+worse than having an itch you can never scratch.
+Deckard: Oh, I agree.
+Leon: Wake up! Time to die.
+[Rachael pops some lead into Leon's cranium]
+[Back at Deckard apartment]
+Deckard: Shakes? Me too. I get 'em bad. It's part of the business.
+.
+1,9d
+2,3c
+(pause) I can see you! (pause, grasping hand) Not yet. Not...
+[Roy put stake through hand and screams.]
+.
+2,8c
+Deckard: Again.
+Rachael: I want you. Put your hands on me.
+[Sebastian's apartment.]
+Sebastian: Whatcha doing?
+Pris: Sorry, just peaking.
+Sebastian: Oh.
+Pris: How do I look?
+.
+1,3p
+4,9p
+7,8d
+5,8p
+1,1p
+3,6c
+Deckard: Abdul Hassan? I'm a police officer, I'd like to ask you a few
+questions. Artificial snake license XB71, that's you? This is your
+work, huh? Who did you sell it to?
+Abdul: My work? Not too many could afford such quality.
+.
+5,5p
+5,5p
+4,14c
+Sebastian: Oh, what about your friends?
+Pris: I have some, but I have to find them. I'll let 'em know where I
+am tomorrow.
+Sebastian: Oh. Can I take those things for you? They're soaked aren't
+they?
+[scene change...] [Deckard uses the machine thing]
+Deckard: Enhance 224 to 176. Enhance, stop. Move in, stop. Pull out,
+track right, stop. Center in, pull back. Stop. Track 45 right. Stop.
+Center and stop. Enhance 34 to 36. Pan right and pull back. Stop.
+Enhance 34 to 46. Pull back. Wait a minute, go right, stop. Enhance 57
+to 19. Track 45 left. Stop. Enhance 15 to 23. Give me a hard copy
+.
+1,2d
+3,8p
+9,14c
+through an electrical field. We lost the others. On the possibility
+they might try to infiltrate his employees, I had Holden go over and
+run Voight-Kampff tests on the new workers. Looks like he got himself
+one.
+Holden (video): So you look down you see a tortoise. It's crawling
+toward you.
+.
+10,20d
+1,8d
+1,1p
+1,7c
+Chew: (stuff). You not come here. Illegal. (pause) Hey. Hey. Cold!
+Those are my eyes! Freezing!
+Roy: Yes, questions.
+[Leon removes Chew's jacket.]
+Roy: Morphology, longevity, incept dates.
+Chew: Don't know -- I, I don't know such stuff. I just do eyes. Just
+eyes -- Just genetic design of eyes -- just eyes. You Nexus, huh? I
+.
+7,9c
+Chew: (stuff). You not come here. Illegal. (pause) Hey. Hey. Cold!
+Those are my eyes! Freezing!
+Roy: Yes, questions.
+.
+9,19c
+Tyrell: Is this to be an empathy test? Capillary dilation of the
+so-called blush response? Fluctuation of the pupil? Involuntary
+dilation of the iris?
+Deckard: We call it Voight-Kampff for short.
+Rachael: Mr. Deckard, Dr. Eldon Tyrell.
+Tyrell: Demonstrate it. I want to see it work.
+Deckard: Where's the subject?
+Tyrell: I want to see it work on a person. I want to see a negative
+before I provide you with a positive.
+Deckard: What's that going to prove?
+Tyrell: Indulge me.
+.
+1,10d
+5,9d
+3,12c
+Deckard: You play beautifully.
+[A little rough-housin']
+Deckard: Say kiss me.
+Rachael: I can't rely on.
+Deckard: Say kiss me.
+Rachael: Kiss me.
+Deckard: I want you.
+Rachael: I want you.
+Deckard: Again.
+Rachael: I want you. Put your hands on me.
+.
+10,12p
+9,16c
+Tyrell: How many questions?
+Deckard: Twenty, thirty, cross-referenced.
+Tyrell: It took more than a hundred for Rachael, didn't it?
+Deckard: She doesn't know?!
+Tyrell: She's beginning to suspect, I think.
+Deckard: Suspect? How can it not know what it is?
+Tyrell: Commerce, is our goal here at Tyrell. More human than human is
+our motto. Rachael is an experiment, nothing more. We began to
+.
+12,18d
+11,12d
+9,17d
+3,6p
+6,15c
+[inside the Tyrell building--looks faintly Egyptian]
+Rachael: Do you like our owl?
+Deckard: It's artificial?
+Rachael: Of course it is.
+Deckard: Must be expensive.
+Rachael: Very. I'm Rachael.
+Deckard: Deckard.
+Rachael: It seems you feel our work is not a benefit to the public.
+Deckard: Replicants are like any other machine. They're either a
+benefit or a hazard. If they're a benefit, it's not my problem.
+.
+11,13d
+8,11d
+3,4p
+5,10p
+8,14d
+6,12c
+Roy: Death.
+Tyrell: Death. Well, I'm afraid that's a little out of my
+jurisdiction, you--
+Roy: I want more life, fucker.
+Tyrell: The facts of life. To make an alteration in the evolvment of
+an organic life system is fatal. A coding sequence cannot be revised
+once it's been established.
+.
+10,19c
+Zhora: How do you mean, exploited?
+Deckard: Well, like to get this job. I mean, did you do, or-- or were
+you asked to do anything that was lewd or unsavory or otherwise, uh,
+repulsive to your person, huh?
+Zhora: Ha. Are you for real?
+Deckard: Oh yeah. I'd like to check your dressing room if I may.
+Zhora: For what?
+Deckard: For, uh, for holes.
+Zhora: Holes?
+Deckard: You'd be surprised what a guy'd go through to get a glimpse
+.
+18,27c
+Deckard: Have you felt yourself to be exploited in any way?
+Zhora: How do you mean, exploited?
+Deckard: Well, like to get this job. I mean, did you do, or-- or were
+you asked to do anything that was lewd or unsavory or otherwise, uh,
+repulsive to your person, huh?
+Zhora: Ha. Are you for real?
+Deckard: Oh yeah. I'd like to check your dressing room if I may.
+Zhora: For what?
+Deckard: For, uh, for holes.
+Zhora: Holes?
+.
+22,32c
+hypothetical.
+Leon: But how come I'd be there?
+Holden: Maybe you're fed up, maybe you want to be by yourself, who
+knows? You look down and you see a tortoise, Leon, it's crawling
+toward you-
+Leon: Tortoise, what's that?
+Holden: Know what a turtle is?
+Leon: Of course.
+Holden: Same thing.
+Leon: I've never seen a turtle. (pause) But I understand what you
+mean.
+.
+32,40d
+28,38c
+Holden: I mean, you're not helping. Why is that Leon? (pause) They're
+just questions, Leon. In answer to your query, they're written down
+for me. It's a test, designed to provoke an emotional response.
+(pause) Shall we continue? Describe in single words, only the good
+things that come in to your mind about: your mother.
+Leon: My mother?
+Holden: Yeah.
+Leon: Let me tell you about my mother. (shot fired)
+[cut to overhead shot of city, zooms in on Deckard, reading a
+newspaper]
+Overhead blimp: A new life awaits you in the off-world colonies, the
+.
+19,22c
+Rachael: I wouldn't let him.
+Deckard (background): orange body, green legs
+Deckard: Why not?
+Rachael: I should be enough for him.
+.
+3,5p
+2,8c
+try to exploit me, who do I go to about it?
+Deckard: Me.
+Zhora: You're a dedicated man.
+[Fight and chase]
+Hari Krishnas: Hari, Hari. Hari, Hari. Hari, Hari.
+Street Thing: Cross now... Don't walk...
+Deckard: Move! Get out of the way!
+.
+8,18d
+9,9p
+19,19p
+14,19d
+7,8p
+19,23d
+3,5p
+12,13p
+7,16c
+experiences which you and I take for granted. If we give them the past
+we create a cushion or pillow for their emotions and consequently we
+can control them better.
+Deckard: Memories. You're talking about memories.
+[Deckard and Gaff drive to Leon's apartment in spinner, watching
+Leon's video.]
+Holden (video): Reaction time is a factor in this, so please pay
+attention. Now, answer as quickly as you can.
+Leon (video): Sure.
+Holden (video): One-one-eight-seven at Hunter-Vasser.
+.
+16,24d
+1,3p
+3,5d
+1,2p
+6,10c
+[Sebastian's apartment.]
+Sebastian: Whatcha doing?
+Pris: Sorry, just peaking.
+Sebastian: Oh.
+Pris: How do I look?
+.
+3,4c
+Deckard: We call it Voight-Kampff for short.
+Rachael: Mr. Deckard, Dr. Eldon Tyrell.
+.
+q
