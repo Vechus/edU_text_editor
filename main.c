@@ -95,7 +95,6 @@ void push_line(txt_line_t** stack, char* text) {
     txt_line_t* tmp;
     tmp = (txt_line_t *)malloc(sizeof(txt_line_t));
     tmp->content = text;
-    //strcpy(tmp->content, text);
     tmp->right = *stack;
     tmp->left = (*stack != NULL) ? (*stack)->left : NULL;
     *stack = tmp;
@@ -119,16 +118,17 @@ void handle_change(lines_stack_t* linesStack, cmd *command) {
     char* input;
     char buff[INPUT_MAX_LENGTH];
 
+    // ALLUNGAMENTO DEL PENE
     if(command->args[1] > linesStack->capacity) {
         linesStack->lines = (txt_line_t **)realloc(linesStack->lines, (command->args[1] + CAPACITY_CONST) * sizeof(txt_line_t*));
+        for(unsigned long int i = linesStack->capacity; i < command->args[1] + CAPACITY_CONST; i++) {
+            linesStack->lines[i] = NULL;
+        }
         linesStack->capacity = command->args[1] + CAPACITY_CONST;
     }
     if(command->args[1] > linesStack->size) linesStack->size = command->args[1];
 
     for(long int i = command->args[0] - 1; i <= command->args[1] - 1; i++) {
-        if(linesStack->lines[i] == NULL) {
-            linesStack->lines[i] = (txt_line_t *)malloc(sizeof(txt_line_t));
-        }
         fgets(buff, INPUT_MAX_LENGTH, stdin);
         input = (char *)malloc((strlen(buff) + 1) * sizeof(char));
         strcpy(input, buff);
@@ -144,7 +144,7 @@ void handle_print(lines_stack_t* linesStack, long int from, long int to) {
     int count = 0;
     long int x = from - 1;
     while(count < delta + 1) {
-        if(x >= linesStack->size) {
+        if(x >= linesStack->size || x < 0) {
             fputs(".\n", stdout);
             count++;
         } else {
@@ -162,11 +162,13 @@ void handle_delete(lines_stack_t* linesStack, del_list_node_t* delStack, long in
     new_tmp->next = delStack;
     new_tmp->linesStack = (lines_stack_t*) malloc(sizeof(lines_stack_t));
     new_tmp->linesStack->index = from;
-    new_tmp->linesStack->lines = (txt_line_t**) malloc((delta) * sizeof(txt_line_t*));
+    new_tmp->linesStack->lines = (txt_line_t**) calloc(delta, sizeof(txt_line_t*));
     new_tmp->linesStack->size = delta;
+    new_tmp->linesStack->capacity = delta;
     // copy sub array into the new array
     memcpy(new_tmp->linesStack->lines, linesStack->lines + (from - 1), delta * sizeof(txt_line_t*));
     delStack = new_tmp;
+
     // resize linesStack
     for(long int i = from - 1; i + delta < linesStack->size; i++) {
         linesStack->lines[i] = linesStack->lines[i + delta];
@@ -174,11 +176,11 @@ void handle_delete(lines_stack_t* linesStack, del_list_node_t* delStack, long in
     linesStack->lines = (txt_line_t **) realloc(linesStack->lines, (linesStack->size - delta + CAPACITY_CONST) * sizeof(txt_line_t*));
     linesStack->size = linesStack->size - delta;
     linesStack->capacity = linesStack->size - delta + CAPACITY_CONST;
-#ifdef DEBUG
+/*#ifdef DEBUG
     printf("DEBUG DELETE:\n");
     debug_print_lines_stack(new_tmp->linesStack);
     debug_print_lines_stack(linesStack);
-#endif
+#endif*/
 }
 
 void handle_temp_undo(lines_stack_t* linesStack, cmd_stack_node_t** cmdStack, cmd_stack_node_t** undoStack, long int steps) {
@@ -210,7 +212,7 @@ void handle_temp_undo(lines_stack_t* linesStack, cmd_stack_node_t** cmdStack, cm
 }
 
 cmd* parse_cmd() {
-    char c, t;
+    char c;
     int arg1 = 0, arg2 = 0;
     cmd *ret = (cmd*) malloc(sizeof(cmd));
     bool a1 = false;
@@ -227,7 +229,7 @@ cmd* parse_cmd() {
             c = getchar_unlocked();
         }
     }
-    t = getchar_unlocked(); // '\n'
+    getchar_unlocked(); // '\n'
     switch (c) {
         case 'q':
             ret->type = QUIT;
@@ -293,9 +295,9 @@ int main() {
 
     linesStack = (lines_stack_t *)malloc(sizeof(lines_stack_t));
     linesStack->index = 0;
-    linesStack->lines = (txt_line_t **)calloc(INIT_LINES_SIZE, sizeof(txt_line_t*));
+    linesStack->lines = (txt_line_t **)calloc(CAPACITY_CONST, sizeof(txt_line_t*));
     linesStack->size = 0;
-    linesStack->capacity = INIT_LINES_SIZE;
+    linesStack->capacity = CAPACITY_CONST;
 
     #ifdef DEBUG
         printf("DEBUG\n");
