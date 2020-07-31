@@ -1,0 +1,41 @@
+1,4d
+1,1p
+1,3d
+1,10d
+1,8c
+(pause) I can see you! (pause, grasping hand) Not yet. Not...
+[Roy put stake through hand and screams.]
+Roy: Yes...
+[Roy puts head through wall.]
+Roy: You better get it up, or I'm gonna have to kill ya! Unless your
+alive, you can't play, and if you don't play... Six, seven. Go to
+hell, go to heaven.
+[Fight]
+.
+4,6p
+8,17c
+again... again. Roy arrives. Deckard fires, but misses.]
+Roy: Not very sporting to fire on an unarmed opponent. I thought you
+were supposed to be good. Aren't you the good man? Come on Deckard.
+Show me what you're made of.
+[Roy breaks through wall.]
+Roy: Proud of yourself, little man? This is for Zhora.
+Deckard: Arrggh.
+Roy: This is for Pris.
+Deckard: Arrgghh.
+Roy: Come on, Deckard, I'm right here, but you've got to shoot
+.
+1,1c
+Pris: Do you live in this building all by yourself?
+.
+17,23c
+Roy: Who does?
+Chew: Tyrell. He -- He knows everything.
+Roy: Tyrell corporation?
+Chew: He big boss. He genius. He design your mind, your brain.
+Roy: Ah, smart.
+Chew: Cold.
+Roy: Not an easy man to see--
+.
+14,14p
+q
