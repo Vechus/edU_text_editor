@@ -5,6 +5,17 @@
 #include <ctype.h>
 #include <math.h>
 
+/**
+ * IDEA: potrei mantenere ogni deleted chunk all'interno della struttura,
+ *  aggiungendo un campo `jump_to` ad ogni elemento eliminato.
+ *      PRO: velocizzare la delete, e di molto (no memcpy e niente shift)
+ *      CON: pochissimo più overhead e complicattezza nelle change e print;
+            con tante delete la complessità potrebbe essere eccessivamente alta?
+            In caso ci fossero N operazioni di delete atomiche e consecutive ogni change/print/undo/redo costa O(N) goddammit
+ *      UNCHANGED: consumo di memoria rimane lo stesso (in realtà aumenta l'uso di 4/8 byte per ogni linea), 
+            stessa complessità spaziale e temporale
+*/
+
 #define INPUT_MAX_LENGTH 1025
 #define INIT_LINES_SIZE 2
 #define CAPACITY_CONST 100
@@ -91,30 +102,13 @@ void push_cmd(cmd_stack_node_t** cmdStack, cmd* command) {
     (*cmdStack)->size++;
 }
 
-void push_line(txt_line_t** stack, char* text) {
+void push_line(txt_line_t** line, char* text) {
     txt_line_t* tmp;
-    tmp = (txt_line_t *)malloc(sizeof(txt_line_t));
+    tmp = (txt_line_t *)calloc(1, sizeof(txt_line_t));
     tmp->content = text;
-    tmp->right = *stack;
-    tmp->left = (*stack != NULL) ? (*stack)->left : NULL;
-    *stack = tmp;
-}
-
-// used for redo change
-void slide_right_line(txt_line_t** line) {
-    txt_line_t* tmp = *line;
-    (*line) = (*line)->left;
-    (*line)->right = tmp;
-}
-
-// used for undo change
-void slide_left_line(txt_line_t** line) {
-	if((*line)->right == NULL) {
-		(*line)->right = (txt_line_t *) calloc(1, sizeof(txt_line_t));
-	}
-    txt_line_t* tmp = *line;
-    (*line) = (*line)->right;
-    (*line)->left = tmp;
+    tmp->right = *line;
+    tmp->left = (*line != NULL) ? (*line)->left : NULL;
+    *line = tmp;
 }
 
 void handle_change(lines_stack_t* linesStack, cmd *command) {
@@ -159,7 +153,8 @@ void handle_print(lines_stack_t* linesStack, long int from, long int to) {
 
 void handle_delete(lines_stack_t* linesStack, del_list_node_t* delStack, long int from, long int to) {
     del_list_node_t* new_tmp;
-    register unsigned long int delta = (to < linesStack->size ? to : linesStack->size) - from + 1;
+    register long int delta = (to < linesStack->size ? to : linesStack->size) - from + 1;
+    if(delta <= 0) return;
     new_tmp = (del_list_node_t*) malloc(sizeof(del_list_node_t));
     new_tmp->next = delStack;
     new_tmp->linesStack = (lines_stack_t*) malloc(sizeof(lines_stack_t));
@@ -171,13 +166,49 @@ void handle_delete(lines_stack_t* linesStack, del_list_node_t* delStack, long in
     memcpy(new_tmp->linesStack->lines, linesStack->lines + (from - 1), delta * sizeof(txt_line_t*));
     delStack = new_tmp;
 
-    // resize linesStack
+    // shift linesStack
     for(long int i = from - 1; i + delta < linesStack->size; i++) {
         linesStack->lines[i] = linesStack->lines[i + delta];
     }
+    // resize stack
     linesStack->lines = (txt_line_t **) realloc(linesStack->lines, (linesStack->size - delta + CAPACITY_CONST) * sizeof(txt_line_t*));
     linesStack->size = linesStack->size - delta;
-    linesStack->capacity = linesStack->size - delta + CAPACITY_CONST;
+    linesStack->capacity = linesStack->size + CAPACITY_CONST;
+}
+
+// used for redo change
+void slide_right_line(txt_line_t** line) {
+    txt_line_t* tmp = *line;
+    (*line) = (*line)->left;
+    (*line)->right = tmp;
+    if((*line)->right->content == NULL) {
+        free((*line)->right);
+        (*line)->right = NULL;
+    }
+}
+
+// used for undo change
+void slide_left_line(txt_line_t** line) {
+	if((*line)->right == NULL) {
+		(*line)->right = (txt_line_t *) calloc(1, sizeof(txt_line_t));
+	}
+    txt_line_t* tmp = *line;
+    (*line) = (*line)->right;
+    (*line)->left = tmp;
+}
+
+void undo_change(lines_stack_t* linesStack, cmd_stack_node_t** cmd) {
+    // slide left all the lines
+    for(long int i = (*cmd)->command->args[0] - 1; i <= (*cmd)->command->args[1] - 1; i++) {
+        slide_left_line(&linesStack->lines[i]);
+    }
+}
+
+void redo_change(lines_stack_t* linesStack, cmd_stack_node_t** cmd) {
+    // slide right all the lines
+    for(long int i = (*cmd)->command->args[0] - 1; i <= (*cmd)->command->args[1] - 1; i++) {
+        slide_right_line(&linesStack->lines[i]);
+    }   
 }
 
 void handle_temp_undo(lines_stack_t* linesStack, del_list_node_t* delStack, cmd_stack_node_t** cmdStack, cmd_stack_node_t** undoStack, long int steps) {
@@ -188,13 +219,10 @@ void handle_temp_undo(lines_stack_t* linesStack, del_list_node_t* delStack, cmd_
         // stack the commands to undo and undo them
         switch((*cmdStack)->command->type) {
         	case CHANGE:
-        		// slide left all the lines
-        		for(long int i = (*cmdStack)->command->args[0] - 1; i <= (*cmdStack)->command->args[1] - 1; i++) {
-        			slide_left_line(&linesStack->lines[i]);
-        		}
+        		undo_change(linesStack, cmdStack);
         		break;
         	case DELETE:
-        		// re insert deleted chunk
+        		// TODO: re insert deleted chunk
         		break;
         }
         // push undoStack and pop cmdStack
@@ -206,16 +234,33 @@ void handle_temp_undo(lines_stack_t* linesStack, del_list_node_t* delStack, cmd_
         (*undoStack)->size++;
         count++;
     }
-#ifdef DEBUG
-    printf("--------------\n");
-    printf("DEBUG UNDO:\n");
-    printf("UNDO STACK: \n");
-    debug_print_cmd_stack(*undoStack);
-    printf("--------------\n");
-    printf("CMD STACK:\n");
-    debug_print_cmd_stack(*cmdStack);
-    printf("--------------\n");
-#endif
+}
+
+void handle_perm_undo(lines_stack_t* linesStack, del_list_node_t* delStack, cmd_stack_node_t** cmdStack, cmd_stack_node_t** undoStack, long int steps) {
+    cmd_stack_node_t* tmp;
+    long int count = 0;
+
+    while((*cmdStack)->command->type != BOTTOM && count < steps) {
+        // stack the commands to undo and undo them
+        switch((*cmdStack)->command->type) {
+        	case CHANGE:
+        		undo_change(linesStack, cmdStack);
+                // TODO: purge left tail
+        		break;
+        	case DELETE:
+        		// TODO: re insert deleted chunk
+        		break;
+        }
+        // TODO: don't push undoStack and pop cmdStack
+        tmp = *cmdStack;
+        *cmdStack = (*cmdStack)->next;
+        (*cmdStack)->size--;
+        tmp->next = *undoStack;
+        *undoStack = tmp;
+        (*undoStack)->size++;
+        count++;
+        // TODO: purge undo stack
+    }
 }
 
 void handle_temp_redo(lines_stack_t* linesStack, del_list_node_t* delStack, cmd_stack_node_t** cmdStack, cmd_stack_node_t** undoStack, long int steps) {
@@ -226,10 +271,8 @@ void handle_temp_redo(lines_stack_t* linesStack, del_list_node_t* delStack, cmd_
         // stack the commands to undo and undo them
         switch((*undoStack)->command->type) {
         	case CHANGE:
-        		// slide right all the lines
-        		for(long int i = (*cmdStack)->command->args[0] - 1; i < (*cmdStack)->command->args[1] - 1; i++) {
-        			slide_right_line(&linesStack->lines[i]);
-        		}
+                // TODO: delete left tail
+        		redo_change(linesStack, undoStack);
         		break;
         	case DELETE:
         		// re-perform deletion
@@ -245,16 +288,6 @@ void handle_temp_redo(lines_stack_t* linesStack, del_list_node_t* delStack, cmd_
         (*cmdStack)->size++;
         count++;
     }
-#ifdef DEBUG
-    printf("--------------\n");
-    printf("DEBUG UNDO:\n");
-    printf("UNDO STACK: \n");
-    debug_print_cmd_stack(*undoStack);
-    printf("--------------\n");
-    printf("CMD STACK:\n");
-    debug_print_cmd_stack(*cmdStack);
-    printf("--------------\n");
-#endif
 }
 
 cmd* parse_cmd() {
@@ -282,29 +315,24 @@ cmd* parse_cmd() {
             break;
         case 'u':
             ret->type = UNDO;
-            //ret->args = (long int*) malloc(sizeof(int));
             ret->args[0] = arg1;
             break;
         case 'r':
             ret->type = REDO;
-            //ret->args = (long int*) malloc(sizeof(int));
             ret->args[0] = arg1;
             break;
         case 'c':
             ret->type = CHANGE;
-            //ret->args = (long int*) malloc(2 * sizeof(int));
             ret->args[0] = arg1;
             ret->args[1] = arg2;
             break;
         case 'p':
             ret->type = PRINT;
-            //ret->args = (long int*) malloc(2 * sizeof(int));
             ret->args[0] = arg1;
             ret->args[1] = arg2;
             break;
         case 'd':
             ret->type = DELETE;
-            //ret->args = (long int*) malloc(2 * sizeof(int));
             ret->args[0] = arg1;
             ret->args[1] = arg2;
             break;
@@ -368,6 +396,8 @@ int main() {
                 	redo_count = 0;
             	} else if(redo_count > 0 && undo_count < redo_count) {
                 	handle_temp_redo(linesStack, delList, &cmdStack, &undoStack, redo_count - undo_count);
+                    undo_count = 0;
+                	redo_count = 0;
                 }
                 handle_print(linesStack, command->args[0], command->args[1]);
                 break;
@@ -375,7 +405,7 @@ int main() {
                 if(undo_count > 0) {
                     // handle remaining undo/redo (and purge structure)
                 }
-                handle_delete(linesStack, delList, command->args[0], command->args[1]);
+                handle_delete(linesStack, delList, command->args[0] + (command->args[0] <= 0 ? 1 : 0), command->args[1]);
                 push_cmd(&cmdStack, command);
                 break;
             case UNDO:
@@ -390,8 +420,10 @@ int main() {
         command = parse_cmd();
     }
     #ifdef DEBUG
-        printf("EQ_UN:: %lu equivalent undo; \n", undo_count);
+        printf("EQ_UN:: %ld equivalent undo; \n", undo_count - redo_count);
+        printf("----------\nCommand stack: \n");
         debug_print_cmd_stack(cmdStack);
+        printf("----------\nUndo stack: \n");
         debug_print_cmd_stack(undoStack);
         debug_print_lines_stack(linesStack);
     #endif
