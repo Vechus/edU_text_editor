@@ -151,12 +151,12 @@ void handle_print(lines_stack_t* linesStack, long int from, long int to) {
     }
 }
 
-void handle_delete(lines_stack_t* linesStack, del_list_node_t* delStack, long int from, long int to) {
+void handle_delete(lines_stack_t* linesStack, del_list_node_t** delStack, long int from, long int to) {
     del_list_node_t* new_tmp;
     register long int delta = (to < linesStack->size ? to : linesStack->size) - from + 1;
     if(delta <= 0) return;
     new_tmp = (del_list_node_t*) malloc(sizeof(del_list_node_t));
-    new_tmp->next = delStack;
+    new_tmp->next = *delStack;
     new_tmp->linesStack = (lines_stack_t*) malloc(sizeof(lines_stack_t));
     new_tmp->linesStack->index = from;
     new_tmp->linesStack->lines = (txt_line_t**) calloc(delta, sizeof(txt_line_t*));
@@ -164,16 +164,18 @@ void handle_delete(lines_stack_t* linesStack, del_list_node_t* delStack, long in
     new_tmp->linesStack->capacity = delta;
     // copy sub array into the new array
     memcpy(new_tmp->linesStack->lines, linesStack->lines + (from - 1), delta * sizeof(txt_line_t*));
-    delStack = new_tmp;
+    *delStack = new_tmp;
 
     // shift linesStack
     for(long int i = from - 1; i + delta < linesStack->size; i++) {
         linesStack->lines[i] = linesStack->lines[i + delta];
     }
-    // resize stack
-    linesStack->lines = (txt_line_t **) realloc(linesStack->lines, (linesStack->size - delta + CAPACITY_CONST) * sizeof(txt_line_t*));
+    // resize stack (TODO: or not?)
     linesStack->size = linesStack->size - delta;
+    /*
+    linesStack->lines = (txt_line_t **) realloc(linesStack->lines, (linesStack->size - delta + CAPACITY_CONST) * sizeof(txt_line_t*));
     linesStack->capacity = linesStack->size + CAPACITY_CONST;
+     */
 }
 
 // used for redo change
@@ -211,6 +213,35 @@ void redo_change(lines_stack_t* linesStack, cmd_stack_node_t** cmd) {
     }   
 }
 
+void undo_delete(lines_stack_t* linesStack, del_list_node_t** delNode) {
+    if(linesStack->capacity < (*delNode)->linesStack->size + linesStack->size) {
+        // re-alloc linesStack
+        linesStack->capacity = linesStack->size + CAPACITY_CONST;
+        linesStack->lines = (txt_line_t **) realloc(linesStack->lines, (linesStack->capacity) * sizeof(txt_line_t*));
+        for(unsigned long int i = linesStack->capacity - (*delNode)->linesStack->size; i < linesStack->capacity; i++) {
+            linesStack->lines[i] = NULL;
+        }
+    }
+    // shift all elements forward
+    linesStack->size += (*delNode)->linesStack->size;
+
+    unsigned int k = 0;
+    // shift
+    for(unsigned int i = linesStack->size; i > linesStack->size - (*delNode)->linesStack->size; i--) {
+        linesStack->lines[i] = linesStack->lines[i - (*delNode)->linesStack->size];
+    }
+    for (unsigned int i = (*delNode)->linesStack->index - 1; i < (*delNode)->linesStack->size; i++) {
+        linesStack->lines[i] = (*delNode)->linesStack->lines[k];
+        k++;
+    }
+
+
+    // pop delNode List element
+    del_list_node_t* tmp = (*delNode)->next;
+    free(*delNode);
+    (*delNode) = tmp;
+}
+
 void handle_temp_undo(lines_stack_t* linesStack, del_list_node_t* delStack, cmd_stack_node_t** cmdStack, cmd_stack_node_t** undoStack, long int steps) {
     cmd_stack_node_t* tmp;
     long int count = 0;
@@ -222,7 +253,8 @@ void handle_temp_undo(lines_stack_t* linesStack, del_list_node_t* delStack, cmd_
         		undo_change(linesStack, cmdStack);
         		break;
         	case DELETE:
-        		// TODO: re insert deleted chunk
+        		// TO/DO: re insert deleted chunk (X)
+        		undo_delete(linesStack, &delStack);
         		break;
         }
         // push undoStack and pop cmdStack
@@ -237,7 +269,6 @@ void handle_temp_undo(lines_stack_t* linesStack, del_list_node_t* delStack, cmd_
 }
 
 void handle_perm_undo(lines_stack_t* linesStack, del_list_node_t* delStack, cmd_stack_node_t** cmdStack, cmd_stack_node_t** undoStack, long int steps) {
-    cmd_stack_node_t* tmp;
     long int count = 0;
 
     while((*cmdStack)->command->type != BOTTOM && count < steps) {
@@ -249,15 +280,18 @@ void handle_perm_undo(lines_stack_t* linesStack, del_list_node_t* delStack, cmd_
         		break;
         	case DELETE:
         		// TODO: re insert deleted chunk
+        		undo_delete(linesStack, &delStack);
         		break;
         }
-        // TODO: don't push undoStack and pop cmdStack
-        tmp = *cmdStack;
-        *cmdStack = (*cmdStack)->next;
+        // TO/DO: don't push undoStack(X) and pop cmdStack(X)
+        cmd_stack_node_t* tmp;
+        tmp = (*cmdStack)->next;
+        free(*cmdStack);
+        *cmdStack = tmp;
         (*cmdStack)->size--;
-        tmp->next = *undoStack;
-        *undoStack = tmp;
-        (*undoStack)->size++;
+        // tmp->next = *undoStack;
+        // *undoStack = tmp;
+        // (*undoStack)->size++;
         count++;
         // TODO: purge undo stack
     }
@@ -276,7 +310,7 @@ void handle_temp_redo(lines_stack_t* linesStack, del_list_node_t* delStack, cmd_
         		break;
         	case DELETE:
         		// re-perform deletion
-        		handle_delete(linesStack, delStack, (*undoStack)->command->args[0], (*undoStack)->command->args[1]);
+        		handle_delete(linesStack, &delStack, (*undoStack)->command->args[0], (*undoStack)->command->args[1]);
         		break;
         }
         // push undoStack and pop cmdStack
@@ -405,7 +439,7 @@ int main() {
                 if(undo_count > 0) {
                     // handle remaining undo/redo (and purge structure)
                 }
-                handle_delete(linesStack, delList, command->args[0] + (command->args[0] <= 0 ? 1 : 0), command->args[1]);
+                handle_delete(linesStack, &delList, command->args[0] + (command->args[0] <= 0 ? 1 : 0), command->args[1]);
                 push_cmd(&cmdStack, command);
                 break;
             case UNDO:
