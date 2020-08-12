@@ -18,6 +18,7 @@
 
 #define INPUT_MAX_LENGTH 1025
 #define CAPACITY_CONST 100
+#define max(x,y) (x > y ? x : y)
 //#define DEBUG 1
 
 // commands in enum (BOTTOM is an auxiliary command that represents the bottom of the stack)
@@ -405,6 +406,7 @@ cmd* parse_cmd() {
 int main() {
     cmd* command;
     // TODO fix counter
+    bool redo_enable = false;
     long int undo_count = 0;
     long int redo_count = 0;
     // all lines with history
@@ -440,12 +442,14 @@ int main() {
     while(command->type != QUIT) {
         switch (command->type) {
             case CHANGE:
-                if(undo_count > 0) {
-                    // handle remaining undo/redo (and purge structure)
+                if(undo_count > redo_count) {
                     handle_perm_undo(linesStack, delList, &cmdStack, &undoStack, undo_count - redo_count);
-                    undo_count = 0;
-                    redo_count = 0;
+                } else if(redo_count > 0 && undo_count < redo_count) {
+                    handle_temp_redo(linesStack, delList, &cmdStack, &undoStack, redo_count - undo_count);
+                    purge_undo_stack(&undoStack);
                 }
+                undo_count = 0;
+                redo_count = 0;
                 handle_change(linesStack, command);
                 push_cmd(&cmdStack, command);
                 break;
@@ -461,20 +465,28 @@ int main() {
                 handle_print(linesStack, command->args[0], command->args[1]);
                 break;
             case DELETE:
-                if(undo_count > 0) {
-                    // handle remaining undo/redo (and purge structure)
+                if(undo_count > redo_count) {
                     handle_perm_undo(linesStack, delList, &cmdStack, &undoStack, undo_count - redo_count);
-                    undo_count = 0;
-                    redo_count = 0;
+                } else if(redo_count > 0 && undo_count < redo_count) {
+                    handle_temp_redo(linesStack, delList, &cmdStack, &undoStack, redo_count - undo_count);
+                    purge_undo_stack(&undoStack);
                 }
+                undo_count = 0;
+                redo_count = 0;
                 handle_delete(linesStack, &delList, command->args[0] + (command->args[0] <= 0 ? 1 : 0), command->args[1]);
                 push_cmd(&cmdStack, command);
                 break;
             case UNDO:
                 undo_count += command->args[0];
+                // cap undo value
+                if(undo_count > cmdStack->size + redo_count)
+                    undo_count = cmdStack->size + redo_count;
                 break;
             case REDO:
-            	redo_count += command->args[0];
+                redo_count += command->args[0];
+                // cap redo value
+                if(redo_count > max(undo_count, undoStack->size))
+                    redo_count = max(undo_count, undoStack->size);
                 break;
             default:
                 break;
