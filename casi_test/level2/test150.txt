@@ -1,38 +1,150 @@
-1,4p
+1,5c
+Holden: You're in a desert, walking along in the sand when all of the
+sudden-
+Leon: Is this the test now?
+Holden: Yes. You're in a desert walking along in the sand when all of
+the sudden you look down-
+.
+4,13d
+3,8c
+Pris: Thanks. (pause) How old are you?
+Sebastian: Twenty-five.
+Pris: What's you problem?
+Sebastian: Methuselah's syndrome.
+Pris: What's that?
+Sebastian: My glands. They grow old too fast.
+.
+1,8p
+7,14d
+1,8d
+1,9d
+1,0p
+1,11d
+1,5c
+Roy: Fiery the angels fell. Deep thunder rode around their shores,
+burning with the fires of Orc.
+Chew: (stuff). You not come here. Illegal. (pause) Hey. Hey. Cold!
+Those are my eyes! Freezing!
+Roy: Yes, questions.
+.
 1,5p
-1,4p
-1,1c
-Deckard: Talk to him.
+2,7d
+1,4d
+1,11d
+1,0p
+1,0p
+1,6c
+[Deckard gurgles blood.]
+Rachael: What if I go north. Disappear. Would you come after me? Hunt
+me?
+Deckard: No. No, I wouldn't. I owe you one. But somebody would.
+Rachael: Deckard? You know those files on me? The incept dates, the
+longevity, those things. You saw them?
 .
-1,6p
-1,3p
-1,5p
-1,4c
-[Ms. Solamay's dressing room.]
-Deckard: Excuse me, Ms. Solamay, can I talk to you for a minute? I'm
-from the American Federation of Variety Artists.
-Zhora: Oh, yeah?
+3,8c
+Roy: Yes, questions.
+[Leon removes Chew's jacket.]
+Roy: Morphology, longevity, incept dates.
+Chew: Don't know -- I, I don't know such stuff. I just do eyes. Just
+eyes -- Just genetic design of eyes -- just eyes. You Nexus, huh? I
+design your eyes.
 .
-3,10d
-2,5p
-2,2p
-1,2p
-1,2c
-bathtub and some family photos. Gaff watches quietly, folding an
-origami statue of a man with an erection.]
-.
-2,6p
-2,7c
-to a snapshot of a mother she never had, a daughter she never was.
-Replicants weren't supposed to have feelings. Neither were blade
-runners. What the hell was happening to me? Leon's pictures had to be
-as phony as Rachael's. I didn't know why a replicant would collect
-photos. Maybe they were like Rachael. They needed memories.
-[Deckard, on balcony.]
-.
-5,14c
+4,4d
+4,12c
+Deckard: One more question. You're watching a stage play. A banquet is
+in progress. The guests are enjoying an appetizer of raw oysters. The
+entree consists of boiled dog.
+Tyrell: Would you step out for a few moments, Rachael? (pause) Thank
+you.
+Deckard: She's a replicant, isn't she?
+Tyrell: I'm impressed. How many questions does it usually take to spot
 them?
 Deckard: I don't get it Tyrell.
+.
+10,13d
+4,6c
+answers the rest of us want. Where did I come from? Where am I going?
+How long have I got? All I could do was sit there and watch him die.
+Gaff: You've done a man's job, sir. I guess your through, huh?
+.
+4,10c
+[Deckard gurgles blood.]
+Rachael: What if I go north. Disappear. Would you come after me? Hunt
+me?
+Deckard: No. No, I wouldn't. I owe you one. But somebody would.
+Rachael: Deckard? You know those files on me? The incept dates, the
+longevity, those things. You saw them?
+Deckard: They're classified.
+.
+1,10p
+6,11d
+2,7d
+1,5c
+[scene change...] [Deckard uses the machine thing]
+Deckard: Enhance 224 to 176. Enhance, stop. Move in, stop. Pull out,
+track right, stop. Center in, pull back. Stop. Track 45 right. Stop.
+Center and stop. Enhance 34 to 36. Pan right and pull back. Stop.
+Enhance 34 to 46. Pull back. Wait a minute, go right, stop. Enhance 57
+.
+1,5p
+1,5p
+4,5c
+Sebastian: I'd be happy to mention it to him.
+Roy: Better if I talk to him in person. But I understand he's a sort
+.
+5,15c
+Taffy: All the time, pal.
+Deckard: Every see this girl, huh?
+Taffy: Never seen her, buzz off.
+Deckard: Your licenses in order pal?
+Taffy: Hey Louie, the man is dry. Give him one on the house. See ya.
+[Deckard calls Rachael on a public videophone.]
+Rachael: Hello?
+Deckard: I've had people walk out on me before, but not when I was
+being so charming. I'm at a bar here now down at the Fourth Sector.
+Taffy Lewis is on the line. Why don't you come on down here and have a
+drink?
+.
+1,15p
+1,15p
+1,15p
+1,8d
+7,13c
+to me to the police.
+Deckard: You've got a little boy. He shows you his butterfly
+collection plus the killing jar.
+Rachael: I take him to the doctor.
+Deckard: You're watching television. Suddenly you realize there's a
+wasp crawling on your arm.
+Rachael: I'd kill it.
+.
+1,13p
+2,7c
+can control them better.
+Deckard: Memories. You're talking about memories.
+[Deckard and Gaff drive to Leon's apartment in spinner, watching
+Leon's video.]
+Holden (video): Reaction time is a factor in this, so please pay
+attention. Now, answer as quickly as you can.
+.
+1,13p
+10,13c
+Leon: But how come I'd be there?
+Holden: Maybe you're fed up, maybe you want to be by yourself, who
+knows? You look down and you see a tortoise, Leon, it's crawling
+toward you-
+.
+9,15c
+Holden: The tortoise lays on its back, its belly baking in the hot sun
+beating its legs trying to turn itself over but it can't, not without
+your help, but you're not helping.
+Leon: What do you mean I'm not helping?
+Holden: I mean, you're not helping. Why is that Leon? (pause) They're
+just questions, Leon. In answer to your query, they're written down
+for me. It's a test, designed to provoke an emotional response.
+.
+1,15p
+14,24c
 Tyrell: How many questions?
 Deckard: Twenty, thirty, cross-referenced.
 Tyrell: It took more than a hundred for Rachael, didn't it?
@@ -41,78 +153,30 @@ Tyrell: She's beginning to suspect, I think.
 Deckard: Suspect? How can it not know what it is?
 Tyrell: Commerce, is our goal here at Tyrell. More human than human is
 our motto. Rachael is an experiment, nothing more. We began to
+recognize in them strange obsessions. After all they are emotional
+inexperienced with only a few years in which to store up the
+experiences which you and I take for granted. If we give them the past
 .
-9,10p
-3,7p
-6,10d
-7,11d
-6,6p
-3,10d
-1,7d
-1,6d
-1,6d
+1,24p
+1,24p
+19,20d
+6,12d
+1,15p
+4,14d
+1,8d
+1,2c
+Sebastian: Oh. Can I take those things for you? They're soaked aren't
+they?
+.
 1,2d
-1,3d
-1,5p
-1,11c
-for an off-world kick-murder squad. Talk about beauty and the beast,
-she's both. The fourth skin job is Pris. A basic pleasure model. The
-standard item for military clubs in the outer colonies. They were
-designed to copy human beings in every way except their emotions. The
-designers reckoned that after a few years they might develop their own
-emotional responses. You know, hate, love, fear, envy. So they built
-in a fail-safe device.
-Deckard: Which is what?
-Bryant: Four year life span.
-Bryant: Now there's a Nexus 6 over at the Tyrell Corporation. I want
-you to go put the machine on it.
-.
-7,11p
-6,9p
-4,8p
-8,11c
-Deckard: Bartender? Taffy Lewis? Taffy, I'd like to ask you a few
-questions.
-Taffy: Blow me.
-Deckard: You ever buy snakes from the Egyptian, Taffy?
-.
-8,18d
-1,11c
-Leon: But how come I'd be there?
-Holden: Maybe you're fed up, maybe you want to be by yourself, who
-knows? You look down and you see a tortoise, Leon, it's crawling
-toward you-
-Leon: Tortoise, what's that?
-Holden: Know what a turtle is?
-Leon: Of course.
-Holden: Same thing.
-Leon: I've never seen a turtle. (pause) But I understand what you
-mean.
-Holden: You reach down, you flip the tortoise over on its back Leon.
-.
-10,18d
-8,14c
-Deckard: Deckard.
-Rachael: It seems you feel our work is not a benefit to the public.
-Deckard: Replicants are like any other machine. They're either a
-benefit or a hazard. If they're a benefit, it's not my problem.
-Rachael: May I ask you a personal question?
-Deckard: Sure.
-Rachael: Have you ever retired a human by mistake?
-.
-12,15d
-11,19d
-2,12d
-1,4p
-1,6c
-not good enough, not as good as you. I need you, Deck. This is a bad
-one, the worse yet. I need the old bladerunner, I need your magic.
-Deckard: I was quit when I came in here. I'm twice as quit now.
-Bryant: Stop right where you are. You know the score pal. If you're
-not cop, you're little people.
-Deckard: No choice, huh?
-.
-5,14c
+1,0p
+1,6d
+1,0p
+1,0p
+1,0p
+1,7d
+1,0p
+1,10c
 It was called retirement."
 ***
 LOS ANGELES
@@ -124,368 +188,295 @@ Leon: Care if I talk? I'm kind of nervous when I take tests.
 Holden: Uh, just please don't move.
 Leon: Oh, sorry. I already had an IQ test this year, I don't think
 .
-1,10c
-Leon (video): I'll tell you about my mother. (shot fired)
-**** is this right ****? [cut to overhead shot of city, zooms in on
-Deckard, reading a newspaper]
-Elevator: Voice print identification. Your floor number please.
-Deckard: Deckard, ninety-seven.
-Elevator: Ninety-seven, thank-you, danke.
-Rachael: I wanted to see you, (pause) so I waited. Let me help.
-Deckard: What do I need help for?
-Rachael: I don't know why he told you what he did.
-Deckard: Talk to him.
+10,16d
+1,9p
+7,11d
+2,6c
+Deckard: Little, uh, dirty holes, uh, they drill in the wall so they
+can watch a lady undress. (pause) Is this a real snake?
+Zhora: Of course it's not real. Do you think I'd be working in a place
+like this if I could afford a real snake? (pause) So if somebody does
+try to exploit me, who do I go to about it?
 .
-7,10p
-3,3c
-questions. Artificial snake license XB71, that's you? This is your
-.
-5,6p
-7,10c
-Leon: Do you make up these questions, Mr. Holden, or do they write
-them down for you?
-Holden: The tortoise lays on its back, its belly baking in the hot sun
-beating its legs trying to turn itself over but it can't, not without
-.
+2,2d
+3,3d
+1,4p
+1,4p
+4,14d
 1,3p
-9,11d
-6,16c
-worse than having an itch you can never scratch.
-Deckard: Oh, I agree.
-Leon: Wake up! Time to die.
-[Rachael pops some lead into Leon's cranium]
-[Back at Deckard apartment]
-Deckard: Shakes? Me too. I get 'em bad. It's part of the business.
-Rachael: I'm not in the business. I am the business.
-[Deckard gurgles blood.]
-Rachael: What if I go north. Disappear. Would you come after me? Hunt
+3,4c
 me?
 Deckard: No. No, I wouldn't. I owe you one. But somebody would.
 .
-5,12d
 2,8d
-1,3p
-1,6d
 1,1d
-1,4d
-1,4c
-[Deckard and Gaff inspect the apartment. Deckard finds a scale in the
-bathtub and some family photos. Gaff watches quietly, folding an
-origami statue of a man with an erection.]
-Deckard (voice-over): I didn't know whether Leon gave Holden a legit
-.
-2,4d
+1,6d
+1,3d
 1,8d
-1,2c
-Leon: I've never seen a turtle. (pause) But I understand what you
-mean.
-.
-1,5p
-1,11c
-In history books he was the kind of cop that used to call black men
-niggers.
-Bryant: They jumped a shuttle off world killed the crew and
-passengers. They found the shuttle drifting off the coast two weeks
-ago so we know they're around.
-Deckard: Embarrassing.
+1,6c
 Bryant: No sir. Not embarrassing, because no one's ever going to find
 out they're down here. Because you're going to spot them, and you're
 going to air them out.
 Decakrd: I don't work here anymore. Give it to Holden, he's good.
 Bryant: I did. He can breath okay as long as nobody unplugs him. He's
-.
-10,18c
-track right, stop. Center in, pull back. Stop. Track 45 right. Stop.
-Center and stop. Enhance 34 to 36. Pan right and pull back. Stop.
-Enhance 34 to 46. Pull back. Wait a minute, go right, stop. Enhance 57
-to 19. Track 45 left. Stop. Enhance 15 to 23. Give me a hard copy
-right there.
-[Market]
-Deckard: Fish?
-Lady: I think it was manufactured. Look. Finest quality. Superior
-workmanship. There is a maker's serial number 9906947-XB71.
-.
-5,7p
-15,21c
-Holden: It doesn't make any difference what desert, it's completely
-hypothetical.
-Leon: But how come I'd be there?
-Holden: Maybe you're fed up, maybe you want to be by yourself, who
-knows? You look down and you see a tortoise, Leon, it's crawling
-toward you-
-Leon: Tortoise, what's that?
-.
-1,6d
-9,12d
-3,3c
-Pris: What's you problem?
+not good enough, not as good as you. I need you, Deck. This is a bad
 .
 2,8d
-3,8p
-3,3d
-2,9c
-Roy: Ah-- There's only two of us now.
-Pris: Then we're stupid and we'll die.
-Roy: No we won't.
-[Sebastian and Roy at chess board]
-Sebastian: No, knight takes queen, see. No good.
-Roy: Why are you staring at us Sebastian?
-Sebastian: Because. You're so different. You're so perfect.
-Roy: Yes.
+1,8c
+Deckard: Twenty, thirty, cross-referenced.
+Tyrell: It took more than a hundred for Rachael, didn't it?
+Deckard: She doesn't know?!
+Tyrell: She's beginning to suspect, I think.
+Deckard: Suspect? How can it not know what it is?
+Tyrell: Commerce, is our goal here at Tyrell. More human than human is
+our motto. Rachael is an experiment, nothing more. We began to
+recognize in them strange obsessions. After all they are emotional
 .
-8,8c
-[Deckard and Gaff inspect the apartment. Deckard finds a scale in the
+1,8p
+1,8p
+5,7c
+Deckard: This is Eddie. An old friend of J. F.'s.
+[Pris hangs up.]
+Deckard: Ooh. That's no way to treat a friend.
 .
-3,8p
-6,8p
-3,4p
-6,9c
-Deckard: Do you trust me?
-Rachael: I trust you.
-Deckard: Rachael?
-[Deckard picks up paper unicorn.]
+2,10c
+Deckard (background): bush outside your window
+Rachael: I wouldn't let him.
+Deckard (background): orange body, green legs
+Deckard: Why not?
+Rachael: I should be enough for him.
+[audio fades out and in, time passes.]
+Deckard: One more question. You're watching a stage play. A banquet is
+in progress. The guests are enjoying an appetizer of raw oysters. The
+entree consists of boiled dog.
 .
-3,5p
-3,4c
-Rachael: I love you.
-Deckard: Do you trust me?
+7,12d
+2,7c
+Gaff (memory): Its too bad she won't live. But then again, who does?
+Deckard (voice-over): Gaff had been there, and let her live. Four
+years, he figured. He was wrong. Tyrell had told me Rachael was
+special: no termination date. I didn't know how long we had together,
+who does?
+THE END
 .
-8,12p
-2,11c
-Pris: I think, Sebastian, therefore I am.
-Roy: Very good Pris, now show him why.
-[Pris throws hot eggs at Sebastian]
-Roy: We've got a lot in common.
-Sebastian: What do you mean?
-Roy: Similar problems.
-Pris: Accelerated decrepitude.
-Sebastian: I don't know much about biomechanics, Roy, I wish I did.
-Roy: If we don't find help soon, Pris hasn't got long to live. We
-can't allow that. (pause) Is he good?
+1,7p
+2,3d
+5,6c
+Now, answer as quickly as you can.
+Leon: Sure.
 .
-7,13c
-Roy: Ah, gosh. You've really got some nice toys here.
-Pris: This is the friend I was telling you about. This is my savior J.
-F. Sebastian.
-Roy: Sebastian. I like a man that stays put. You live here all by
-yourself, do ya?
-Sebastian: Yes. (pause) How 'bout some breakfast. I was just gonna
-make some.
+4,5d
+1,5d
+1,4d
+1,2d
+1,1c
+corrupted man.
 .
-13,15c
-Deckard: Your licenses in order pal?
-Taffy: Hey Louie, the man is dry. Give him one on the house. See ya.
-[Deckard calls Rachael on a public videophone.]
+1,6c
+them?
+Deckard: I don't get it Tyrell.
+Tyrell: How many questions?
+Deckard: Twenty, thirty, cross-referenced.
+Tyrell: It took more than a hundred for Rachael, didn't it?
+Deckard: She doesn't know?!
 .
-8,18d
-4,7d
-2,10d
-1,10c
-Deckard (voice over): Sushi, that's what my ex-wife called me. Cold
-fish.
-Gaff: Hey, idi-wa.
-Chinese dude: He say you under arrest, Mr. Deckard.
-Deckard: Got the wrong guy, pal.
-Gaff:
-Chinese dude: He say you blade runner.
-Deckard: Tell him I'm eating.
-Gaff:
-Deckard: Bryant, huh?
+1,6p
+3,7c
+Rachael: I wouldn't let him.
+Deckard (background): orange body, green legs
+Deckard: Why not?
+Rachael: I should be enough for him.
+[audio fades out and in, time passes.]
 .
-1,2p
-1,3p
-4,14c
-[Leon meets Roy outside of phonebooth]
-Roy: Time enough. (pause) Did you get your precious photos?
-Leon: Someone was there.
-Roy: Man? (pause) Policeman?
-[Roy and Leon enter Chew's laboratory]
-Chew: (mumbles to himself) (pause) (screaming)
-Roy: Fiery the angels fell. Deep thunder rode around their shores,
-burning with the fires of Orc.
+5,13c
+Toys: Home again, home again, jiggity jig. Good evening J. F.
+Sebastian: Good evening, fellas.
+Toy 1: Oooh!
+Sebastian: They're my friends. I made them. Where are you're folks?
+Pris: I'm sort of an orphan.
+Sebastian: Oh, what about your friends?
+Pris: I have some, but I have to find them. I'll let 'em know where I
+am tomorrow.
+Sebastian: Oh. Can I take those things for you? They're soaked aren't
+.
+8,13c
 Chew: (stuff). You not come here. Illegal. (pause) Hey. Hey. Cold!
 Those are my eyes! Freezing!
 Roy: Yes, questions.
+[Leon removes Chew's jacket.]
+Roy: Morphology, longevity, incept dates.
+Chew: Don't know -- I, I don't know such stuff. I just do eyes. Just
 .
-13,16d
-7,16c
-Bryant: Body identified with Tyrell as a twenty-five year old male
-caucasian named Sebastian. J. F. Sebastian. Address Bradbury
-apartments, ninth sector. NM46751. I want you to go down there---
-Cop: This sector's closed to ground traffic. What are you doing here?
-Deckard: I'm working. What are you doing?
-Cop: Arresting you. That's what I'm doing.
-Deckard: I'm Deckard. Blade runner. Two sixty three-fifty four. I'm
-filed and monitored ( Cop: Checking. (pause) Okay, checked and
-cleared. Have a better one.
-[Deckard calls Sebastian's apartment.]
+11,13d
+9,17c
+work, huh? Who did you sell it to?
+Abdul: My work? Not too many could afford such quality.
+Deckard: How many?
+Abdul: Very few.
+Deckard: How few? Look my friend.
+Abdul: Taffy Lewis, down in first sector, Chinatown.
+[Taffy Lewis's]
+Deckard: Bartender? Taffy Lewis? Taffy, I'd like to ask you a few
+questions.
 .
-10,10p
-16,18p
-15,20p
-15,20c
-rats leaving a sinking ship. Then the ship sinks.
-Roy: What about EMS recombination.
-Tyrell: We've already tried it. Ethyl methane sulfanate as an
-alkalating agent and potent mutagen. It created a virus so lethal the
-subject was dead before he left the table.
-Roy: Then a repressive protein that blocks the operating cells.
+1,17p
+8,8d
+1,16p
+1,16p
+1,16p
+12,19c
+Sebastian: I'd be happy to mention it to him.
+Roy: Better if I talk to him in person. But I understand he's a sort
+of hard man to get to.
+Sebastian: Yes, very.
+Roy: Will you help us?
+Sebastian: I can't.
+Pris: We need you Sebastian. You're our best and only friend.
+Roy: (Goofy chinese accent) We're so happy you found us.
 .
-4,9c
-Roy: Yes, questions.
+14,18c
+Holden (video): Reaction time is a factor in this, so please pay
+attention. Now, answer as quickly as you can.
+Leon (video): Sure.
+Holden (video): One-one-eight-seven at Hunter-Vasser.
+Leon (video): Yeah, That's the hotel.
+.
+1,19p
+10,19d
+1,9p
+5,12c
+gibberish he talked was city-speak, guttertalk, a mishmash of
+Japanese, Spanish, German, what have you. I didn't really need a
+translator. I knew the lingo, every good cop did. But I wasn't going
+to make it easier for him.
+Spinner: ...now on glide path, on course, over the landing threshold.
+[Bryant's office]
+Bryant: Hiya Deck.
+Deckard: Bryant.
+.
+4,7d
+1,8p
+6,6d
+5,11d
+1,4p
+1,8c
+Deckard: I dreamt music.
+Rachael: I didn't know if I could play. I remember lessons. I don't
+know if it's me or Tyrell's niece.
+Deckard: You play beautifully.
+[A little rough-housin']
+Deckard: Say kiss me.
+Rachael: I can't rely on.
+Deckard: Say kiss me.
+.
+1,8p
+7,8c
+Deckard: I want you.
+Rachael: I want you.
+.
+3,4d
+5,13d
+1,10c
+Rachael: Do you mind if I smoke?
+Deckard: It won't affect the test. Alright, I'm going to ask you a
+series of questions. Just relax and answer them as simply as you can.
+(pause) It's your birthday. Someone gives you a calfskin wallet.
+Rachael: I wouldn't accept it. Also, I'd report the person who gave it
+to me to the police.
+Deckard: You've got a little boy. He shows you his butterfly
+collection plus the killing jar.
+Rachael: I take him to the doctor.
+Deckard: You're watching television. Suddenly you realize there's a
+.
+4,10c
+Pris: I was hoping you'd say that.
+[Pris and Sebastian enter building.]
+Pris: Do you live in this building all by yourself?
+Sebastian: Yeah, I live here pretty much alone right now. No housing
+shortage around here. Plenty of room for everybody. (pause)
+Pris: (cough).
+Sebastian: Watch out for the water.
+.
+5,13c
 [Leon removes Chew's jacket.]
 Roy: Morphology, longevity, incept dates.
 Chew: Don't know -- I, I don't know such stuff. I just do eyes. Just
 eyes -- Just genetic design of eyes -- just eyes. You Nexus, huh? I
 design your eyes.
+Roy: Chew, if only you could see what I've seen with your eyes.
+Questions.
+Chew: I don't know answers.
+Roy: Who does?
 .
-2,4d
-14,17d
-2,4d
-5,10d
-2,8c
-Computer: New entry. A Mr. J. F. Sebastian. 1-6-4-1-7.
-Tyrell: At this hour? What can I do for you Sebastian.
-Sebastian: Queen to Bishop 6. Check.
-Tyrell: Nonsense. Just a moment. Mmmm. Queen to Bishop 6. Ridiculous.
-Queen to Bishop 6. Hmmm... Knight takes Queen. (pause) What's on your
-mine Sebastian. What are you thinking about.
-Roy: (whispered) Bishop to King 7.
+11,13c
+Tyrell: We've already tried it. Ethyl methane sulfanate as an
+alkalating agent and potent mutagen. It created a virus so lethal the
+subject was dead before he left the table.
 .
-8,18d
-3,5p
-4,4p
+3,7d
+6,14d
 1,5p
-6,10c
-Those are my eyes! Freezing!
-Roy: Yes, questions.
-[Leon removes Chew's jacket.]
-Roy: Morphology, longevity, incept dates.
-Chew: Don't know -- I, I don't know such stuff. I just do eyes. Just
+3,8c
+Deckard: Deckard. B-263-54.
+Street thing: Move on...
+Lady: Yeah what do you want?
+Deckard: Tsing tao. This enough?
+Lady: Yeah.
+Gaff: Bryant.
 .
-3,8d
-1,1d
-1,11d
-1,4p
-1,1c
-you asked to do anything that was lewd or unsavory or otherwise, uh,
+1,8p
+1,8p
+2,2c
+Roy: If we don't find help soon, Pris hasn't got long to live. We
 .
-1,2p
-1,3p
-1,5c
-Roy: I've done questionable things.
-Tyrell: Also extraordinary things. Revel in your time.
-Roy: Nothing the god of biomechanics wouldn't let you in heaven for.
-[Tyrell screams as his eyes are gouged out.]
-[On the street...]
+5,8c
+Holden: It doesn't make any difference what desert, it's completely
+hypothetical.
+Leon: But how come I'd be there?
+Holden: Maybe you're fed up, maybe you want to be by yourself, who
 .
-4,5p
-2,12d
-1,4p
-1,4c
-Deckard: Bryant, huh?
-[Deckard and Gaff take off vertically in spinner to see Bryant.]
-Spinner: climb and maintain 4000 ... when approaching pad six ...
-Deckard (voice-over): The charmer's name was Gaff. I'd seen him
+1,8p
+1,8p
+1,8p
+7,9c
+Deckard: Talk to him.
+Rachael: He wouldn't see me.
+Deckard: Do you want a drink? No? No?
 .
-1,3p
-3,4p
-4,8p
-2,2p
-4,10d
-2,3p
-2,12c
-passengers. They found the shuttle drifting off the coast two weeks
-ago so we know they're around.
-Deckard: Embarrassing.
-Bryant: No sir. Not embarrassing, because no one's ever going to find
-out they're down here. Because you're going to spot them, and you're
-going to air them out.
-Decakrd: I don't work here anymore. Give it to Holden, he's good.
-Bryant: I did. He can breath okay as long as nobody unplugs him. He's
-not good enough, not as good as you. I need you, Deck. This is a bad
-one, the worse yet. I need the old bladerunner, I need your magic.
-Deckard: I was quit when I came in here. I'm twice as quit now.
+1,9p
+2,10c
+Gaff: Bryant.
+Bryant: Christ, Deckard, you look almost as bad as that skin job you
+left on the sidewalk.
+Deckard: I'm going home.
+Bryant: You could learn from this guy Gaff. He's a god damn one man
+slaughter house. That's what he is. Four more to go. Come on Gaff,
+let's go.
+Deckard: Three. There's three to go.
+Bryant: There's four. That-- That skin job that you V-K'ed at the
 .
-3,3c
-Now, answer as quickly as you can.
+1,10p
+3,10c
+[the window changes shade, letting less light in]
+Rachael: Do you mind if I smoke?
+Deckard: It won't affect the test. Alright, I'm going to ask you a
+series of questions. Just relax and answer them as simply as you can.
+(pause) It's your birthday. Someone gives you a calfskin wallet.
+Rachael: I wouldn't accept it. Also, I'd report the person who gave it
+to me to the police.
+Deckard: You've got a little boy. He shows you his butterfly
 .
-12,14p
-3,13d
-1,3p
-2,7p
-2,11d
-1,4p
-1,4p
-1,6c
-Roy: Ah, gosh. You've really got some nice toys here.
-Pris: This is the friend I was telling you about. This is my savior J.
-F. Sebastian.
-Roy: Sebastian. I like a man that stays put. You live here all by
-yourself, do ya?
-Sebastian: Yes. (pause) How 'bout some breakfast. I was just gonna
+1,10p
+3,5d
+1,7p
+1,9d
+1,9d
+1,8d
+1,3c
+bush outside your window: orange body, green legs. Watched her build a
+web all summer. Then one day there was a big egg in it. The egg
+hatched--
 .
-6,9c
-awake, huh? Lets discuss this. You better come up, Sebastian.
-Sebastian: Mr. Tyrell. I-- I brought a friend.
-Tyrell: I'm surprised you didn't come here sooner.
-Roy: It's not an easy thing to meet your maker.
-.
-9,17d
-6,10d
-2,7d
-1,8c
-Pris: Hi.
-Sebastian: Hi. Oh, where were you going? Home?
-Pris: I don't have one. We scared each other pretty good, didn't we?
-Sebastian: We sure did.
-Pris: I'm hungry J. F.
-Sebastian: I've got some stuff inside. You want to come in?
-Pris: I was hoping you'd say that.
-[Pris and Sebastian enter building.]
-.
-2,12c
-niggers.
-Bryant: They jumped a shuttle off world killed the crew and
-passengers. They found the shuttle drifting off the coast two weeks
-ago so we know they're around.
-Deckard: Embarrassing.
-Bryant: No sir. Not embarrassing, because no one's ever going to find
-out they're down here. Because you're going to spot them, and you're
-going to air them out.
-Decakrd: I don't work here anymore. Give it to Holden, he's good.
-Bryant: I did. He can breath okay as long as nobody unplugs him. He's
-not good enough, not as good as you. I need you, Deck. This is a bad
-.
-1,1d
-7,10c
-Computer: New entry. A Mr. J. F. Sebastian. 1-6-4-1-7.
-Tyrell: At this hour? What can I do for you Sebastian.
-Sebastian: Queen to Bishop 6. Check.
-Tyrell: Nonsense. Just a moment. Mmmm. Queen to Bishop 6. Ridiculous.
-.
-4,8d
-2,7c
-Pris: This is the friend I was telling you about. This is my savior J.
-F. Sebastian.
-Roy: Sebastian. I like a man that stays put. You live here all by
-yourself, do ya?
-Sebastian: Yes. (pause) How 'bout some breakfast. I was just gonna
-make some.
-.
-5,14c
-Pris: Is that why you're still on earth?
-Sebastian: Yeah, I couldn't pass the medical. Anyway, I kind of like
-it here.
-Pris: I like you just the way you are. Hi Roy.
-Roy: Ah, gosh. You've really got some nice toys here.
-Pris: This is the friend I was telling you about. This is my savior J.
-F. Sebastian.
-Roy: Sebastian. I like a man that stays put. You live here all by
-yourself, do ya?
-Sebastian: Yes. (pause) How 'bout some breakfast. I was just gonna
-.
-12,13p
-5,6p
-1,5p
+2,8d
+1,1p
 q
