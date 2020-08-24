@@ -16,6 +16,8 @@
             stessa complessità spaziale e temporale
 */
 
+// TODO: fix duplicating pointers!
+
 #define INPUT_MAX_LENGTH 1025
 #define CAPACITY_CONST 100
 #define max(x,y) (x > y ? x : y)
@@ -98,6 +100,11 @@ void debug_print_cmd_stack(cmd_head_t* cmdHead) {
     }
 }
 
+/**
+ * Pushes a command inside the cmdHead stack.
+ * @param cmdHead the command stack head.
+ * @param command the command to be pushed.
+ */
 void push_cmd(cmd_head_t** cmdHead, cmd* command) {
     cmd_stack_node_t* tmp = (cmd_stack_node_t *)malloc(sizeof(cmd_stack_node_t));
     tmp->command = command;
@@ -106,6 +113,11 @@ void push_cmd(cmd_head_t** cmdHead, cmd* command) {
     (*cmdHead)->size++;
 }
 
+/**
+ * Moves the first command from a stack head to another
+ * @param from
+ * @param to
+ */
 void move_cmd(cmd_head_t* from, cmd_head_t* to) {
     cmd_stack_node_t* tmp = from->head;
     from->head = from->head->next;
@@ -115,6 +127,11 @@ void move_cmd(cmd_head_t* from, cmd_head_t* to) {
     to->size++;
 }
 
+/**
+ * Pushes a line into the lines structure
+ * @param line The line object
+ * @param text the text (already alloc'd) to push
+ */
 void push_line(txt_line_t** line, char* text) {
     txt_line_t* tmp;
     tmp = (txt_line_t *)calloc(1, sizeof(txt_line_t));
@@ -124,6 +141,13 @@ void push_line(txt_line_t** line, char* text) {
     *line = tmp;
 }
 
+/**
+ * Handles change. For each line inputted after 'c' command it pushes the line in place.
+ * If a line is occupied, the old line gets pushed to the right, and the new line is pointed by the structure.
+ * Note that the left pointer remains untouched after this operation.
+ * @param linesStack the main lines structure
+ * @param command the change command object
+ */
 void handle_change(lines_stack_t* linesStack, cmd *command) {
     char* input;
     char buff[INPUT_MAX_LENGTH];
@@ -148,6 +172,13 @@ void handle_change(lines_stack_t* linesStack, cmd *command) {
     getchar_unlocked();
 }
 
+/**
+ * Handles print. Iterates through the lines structure, if the line has null content it prints '.\n',
+ *  else prints the line's content.
+ * @param linesStack the lines structure
+ * @param from command parameter
+ * @param to command parameter
+ */
 void handle_print(lines_stack_t* linesStack, long int from, long int to) {
     long int delta = to - from;
     int count = 0;
@@ -164,6 +195,18 @@ void handle_print(lines_stack_t* linesStack, long int from, long int to) {
     }
 }
 
+/**
+ * Handles delete. It deletes a chunk of lines and pushes it to the delete stack structure.
+ * if delta <=0: create a dummy delete to ignore in case of undo
+ * else:
+ *      create a new delete stack node;
+ *      transfer the chunk into the node;
+ *      shift the lines structure (fill the gap);
+ * @param linesStack
+ * @param delStack
+ * @param from
+ * @param to
+ */
 void handle_delete(lines_stack_t* linesStack, del_list_node_t** delStack, long int from, long int to) {
     del_list_node_t* new_tmp;
     register long int delta = (to < linesStack->size ? to : linesStack->size) - from + 1;
@@ -226,7 +269,10 @@ void handle_delete(lines_stack_t* linesStack, del_list_node_t** delStack, long i
      */
 }
 
-// used for redo change
+/**
+ * Slides a text line to the right: used for redo of a change.
+ * @param line
+ */
 void slide_right_line(txt_line_t** line) {
     txt_line_t* tmp = *line;
     (*line) = (*line)->left;
@@ -237,7 +283,10 @@ void slide_right_line(txt_line_t** line) {
     }
 }
 
-// used for undo change
+/**
+ * Slides a text line to the left: used for undo of a change.
+ * @param line
+ */
 void slide_left_line(txt_line_t** line) {
 	if((*line)->right == NULL) {
 		(*line)->right = (txt_line_t *) calloc(1, sizeof(txt_line_t));
@@ -247,18 +296,26 @@ void slide_left_line(txt_line_t** line) {
     (*line)->left = tmp;
 }
 
-void purge_left_list(txt_line_t** line) {
-    txt_line_t* curr = (*line)->left;
+/**
+ * Deletes all left nodes to the left: used after a permanent undo/redo to all involved lines.
+ * @param line
+ */
+void purge_left_list(txt_line_t* line) {
+    txt_line_t* curr = line->left;
     txt_line_t* next;
     while(curr != NULL) {
         next = curr->left;
-        free(curr->content);
-        free(curr);
+        //free(curr->content);
+        //free(curr);
         curr = next;
     }
-    (*line)->left = NULL;
+    line->left = NULL;
 }
 
+/**
+ * Deletes all nodes into the undo command stack: used after a permanent undo/redo.
+ * @param cmd the undo command structure *content* (not the head)
+ */
 void purge_undo_stack(cmd_stack_node_t** cmd) {
     cmd_stack_node_t* curr = *cmd;
     cmd_stack_node_t* next;
@@ -272,6 +329,11 @@ void purge_undo_stack(cmd_stack_node_t** cmd) {
     }
 }
 
+/**
+ * Undos a change: slides all involved lines to the left.
+ * @param linesStack the lines structure
+ * @param cmd the command to be undo'd
+ */
 void undo_change(lines_stack_t* linesStack, cmd_stack_node_t** cmd) {
     // slide left all the lines
     for(long int i = (*cmd)->command->args[0] - 1; i <= (*cmd)->command->args[1] - 1; i++) {
@@ -279,6 +341,11 @@ void undo_change(lines_stack_t* linesStack, cmd_stack_node_t** cmd) {
     }
 }
 
+/**
+ * Redos a change: slides all involved lines to the right.
+ * @param linesStack the lines structure
+ * @param cmd the command to be redo'd
+ */
 void redo_change(lines_stack_t* linesStack, cmd_stack_node_t** cmd) {
     // slide right all the lines
     for(long int i = (*cmd)->command->args[0] - 1; i <= (*cmd)->command->args[1] - 1; i++) {
@@ -286,6 +353,17 @@ void redo_change(lines_stack_t* linesStack, cmd_stack_node_t** cmd) {
     }
 }
 
+
+/**
+ * Undoes a delete operation.
+ *      if the delete is a dummy one: ignore it;
+ *      if the lines structure needs to be resized: do it (Note: not necessary because the delete does not shrink back the structure);
+ *      shift the lines, creating a gap to insert the deleted lines to;
+ *      insert the lines into the gap;
+ *      pop stack node;
+ * @param linesStack
+ * @param delNode
+ */
 void undo_delete(lines_stack_t* linesStack, del_list_node_t** delNode) {
     if((*delNode)->linesStack->index == -1) {
         del_list_node_t* tmp = (*delNode)->next;
@@ -330,6 +408,12 @@ void undo_delete(lines_stack_t* linesStack, del_list_node_t** delNode) {
     (*delNode) = tmp;
 }
 
+/**
+ * @deprecated
+ * Pops a command from a command stack and returns it.
+ * @param cmdHead
+ * @return
+ */
 cmd_stack_node_t* pop_cmd(cmd_head_t** cmdHead) {
     cmd_stack_node_t* tmp = (*cmdHead)->head;
     (*cmdHead)->head = (*cmdHead)->head->next;
@@ -337,15 +421,28 @@ cmd_stack_node_t* pop_cmd(cmd_head_t** cmdHead) {
     return tmp;
 }
 
+/**
+ * Pops a command from a command stack and frees it.
+ * @param cmdHead
+ */
 void pop_cmd_free(cmd_head_t** cmdHead) {
     cmd_stack_node_t* tmp = (*cmdHead)->head;
     (*cmdHead)->head = (*cmdHead)->head->next;
     (*cmdHead)->size--;
-    free(tmp->command->args);
+    //free(tmp->command->args);
     free(tmp->command);
     free(tmp);
 }
 
+/**
+ * Handles a temporary undo.
+ * Iterates through the command stack, calls the right undo functions and moves the command from cmdHead to undoHead.
+ * @param linesStack
+ * @param delStack
+ * @param cmdHead
+ * @param undoHead
+ * @param steps number of undo steps
+ */
 void handle_temp_undo(lines_stack_t* linesStack, del_list_node_t** delStack, cmd_head_t* cmdHead, cmd_head_t* undoHead, long int steps) {
     long int count = 0;
 
@@ -368,6 +465,15 @@ void handle_temp_undo(lines_stack_t* linesStack, del_list_node_t** delStack, cmd
     }
 }
 
+/**
+ * Handles a permanent undo.
+ * Iterates through the command stack, calls the right undo functions, pops command from the cmdHead and then purges the undo stack.
+ * @param linesStack
+ * @param delStack
+ * @param cmdHead
+ * @param undoHead
+ * @param steps
+ */
 void handle_perm_undo(lines_stack_t* linesStack, del_list_node_t** delStack, cmd_head_t** cmdHead, cmd_head_t** undoHead, long int steps) {
     long int count = 0;
 
@@ -378,7 +484,7 @@ void handle_perm_undo(lines_stack_t* linesStack, del_list_node_t** delStack, cmd
         		undo_change(linesStack, &(*cmdHead)->head);
                 // purge left tail
                 for(long int i = (*cmdHead)->head->command->args[0] - 1; i < (*cmdHead)->head->command->args[1] - 1; i++) {
-                    purge_left_list(&linesStack->lines[i]);
+                    purge_left_list(linesStack->lines[i]);
                 }
         		break;
         	case DELETE:
@@ -390,11 +496,21 @@ void handle_perm_undo(lines_stack_t* linesStack, del_list_node_t** delStack, cmd
         // pop from cmdHead, no need to push it to undoHead
         pop_cmd_free(cmdHead);
         count++;
-        // purge undo stack
-        purge_undo_stack(&(*undoHead)->head);
+
     }
+    // purge undo stack
+    purge_undo_stack(&(*undoHead)->head);
 }
 
+/**
+ * Handles a temporary redo.
+ * Calls the right redo functions and moves the commands from undoHead to cmdHead
+ * @param linesStack
+ * @param delStack
+ * @param cmdHead
+ * @param undoHead
+ * @param steps
+ */
 void handle_temp_redo(lines_stack_t* linesStack, del_list_node_t** delStack, cmd_head_t* cmdHead, cmd_head_t* undoHead, long int steps) {
     long int count = 0;
 
@@ -417,6 +533,10 @@ void handle_temp_redo(lines_stack_t* linesStack, del_list_node_t** delStack, cmd
     }
 }
 
+/**
+ * Parses commands
+ * @return
+ */
 cmd* parse_cmd() {
     char c;
     int arg1 = 0, arg2 = 0;
