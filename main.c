@@ -186,15 +186,32 @@ void handle_delete(lines_stack_t* linesStack, del_list_node_t** delStack, long i
     new_tmp->linesStack->size = delta;
     new_tmp->linesStack->capacity = delta;
     // copy sub array into the new array
-    memcpy(new_tmp->linesStack->lines, linesStack->lines + (from - 1), delta * sizeof(txt_line_t*));
+    for(long int i = 0; i < delta; i++) {
+        new_tmp->linesStack->lines[i] = (txt_line_t *)calloc(1, sizeof(txt_line_t));
+        new_tmp->linesStack->lines[i]->left = linesStack->lines[i + from - 1]->left;
+        new_tmp->linesStack->lines[i]->right = linesStack->lines[i + from - 1]->right;
+        new_tmp->linesStack->lines[i]->content = linesStack->lines[i + from - 1]->content;
+    }
+    //memcpy(new_tmp->linesStack->lines, linesStack->lines + (from - 1), delta * sizeof(txt_line_t*));
     *delStack = new_tmp;
 
     // shift linesStack
     for(long int i = from - 1; i + delta < linesStack->size; i++) {
-        linesStack->lines[i] = linesStack->lines[i + delta];
+        if(linesStack->lines[i + delta] == NULL) {
+            linesStack->lines[i]->content = NULL;
+            linesStack->lines[i]->right = NULL;
+            linesStack->lines[i]->left = NULL;
+            continue;
+        }
+        linesStack->lines[i]->content = linesStack->lines[i + delta]->content;
+        linesStack->lines[i]->right = linesStack->lines[i + delta]->right;
+        linesStack->lines[i]->left = linesStack->lines[i + delta]->left;
+        linesStack->lines[i + delta]->content = NULL;
+        linesStack->lines[i + delta]->right = NULL;
+        linesStack->lines[i + delta]->left = NULL;
     }
     if(to >= linesStack->size) {
-        for(long int i = from - 1; i <= linesStack->size; i++) {
+        for(long int i = from - 1; i < linesStack->size; i++) {
             linesStack->lines[i]->content = NULL;
             linesStack->lines[i]->right = NULL;
             linesStack->lines[i]->left = NULL;
@@ -266,7 +283,7 @@ void redo_change(lines_stack_t* linesStack, cmd_stack_node_t** cmd) {
     // slide right all the lines
     for(long int i = (*cmd)->command->args[0] - 1; i <= (*cmd)->command->args[1] - 1; i++) {
         slide_right_line(&linesStack->lines[i]);
-    }   
+    }
 }
 
 void undo_delete(lines_stack_t* linesStack, del_list_node_t** delNode) {
@@ -284,17 +301,25 @@ void undo_delete(lines_stack_t* linesStack, del_list_node_t** delNode) {
             linesStack->lines[i] = NULL;
         }
     }
+
     // shift all elements forward
     linesStack->size += (*delNode)->linesStack->size;
-
     int k = 0;
     // shift
-    for(long int i = linesStack->size; i > linesStack->size - (*delNode)->linesStack->size; i--) {
-        linesStack->lines[i] = linesStack->lines[i - (*delNode)->linesStack->size];
+    for(long int i = linesStack->size - 1; i >= (*delNode)->linesStack->size; i--) {
+        if(linesStack->lines[i] == NULL){
+            linesStack->lines[i] = (txt_line_t *)calloc(1, sizeof(txt_line_t));
+        }
+        linesStack->lines[i]->content = linesStack->lines[i - (*delNode)->linesStack->size]->content;
+        linesStack->lines[i]->left = linesStack->lines[i - (*delNode)->linesStack->size]->left;
+        linesStack->lines[i]->right = linesStack->lines[i - (*delNode)->linesStack->size]->right;
     }
     // re insert deleted lines
     for (long int i = (*delNode)->linesStack->index - 1; i < (*delNode)->linesStack->size; i++) {
-        linesStack->lines[i] = (*delNode)->linesStack->lines[k];
+        linesStack->lines[i]->content = (*delNode)->linesStack->lines[k]->content;
+        linesStack->lines[i]->right = (*delNode)->linesStack->lines[k]->right;
+        linesStack->lines[i]->left = (*delNode)->linesStack->lines[k]->left;
+        free((*delNode)->linesStack->lines[k]);
         k++;
     }
 
@@ -531,8 +556,8 @@ int main() {
             case REDO:
                 redo_count += command->args[0];
                 // cap redo value
-                if(redo_count > max(undo_count, undoHead->size))
-                    redo_count = max(undo_count, undoHead->size);
+                if(redo_count > undo_count + undoHead->size)
+                    redo_count = undo_count + undoHead->size;
                 break;
             default:
                 break;
