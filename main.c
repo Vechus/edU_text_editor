@@ -12,7 +12,7 @@
  *      CON: pochissimo più overhead e complicattezza nelle change e print;
             con tante delete la complessità potrebbe essere eccessivamente alta?
             In caso ci fossero N operazioni di delete atomiche e consecutive ogni change/print/undo/redo costa O(N) goddammit
- *      UNCHANGED: consumo di memoria rimane lo stesso (in realtà aumenta l'uso di 4/8 byte per ogni linea), 
+ *      UNCHANGED: consumo di memoria rimane lo stesso (in realtà aumenta l'uso di 4/8 byte per ogni linea),
             stessa complessità spaziale e temporale
 */
 
@@ -20,7 +20,7 @@
 
 #define INPUT_MAX_LENGTH 1025
 #define CAPACITY_CONST 100
-#define max(x,y) (x > y ? x : y)
+//#define max(x,y) (x > y ? x : y)
 //#define DEBUG 1
 
 // commands in enum (BOTTOM is an auxiliary command that represents the bottom of the stack)
@@ -128,6 +128,25 @@ void move_cmd(cmd_head_t* from, cmd_head_t* to) {
 }
 
 /**
+ * Deletes all nodes into the undo command stack: used after a permanent undo/redo.
+ * @param cmd the undo command structure *content* (not the head)
+ */
+void clear_undo_stack(cmd_stack_node_t** cmd) {
+    cmd_stack_node_t* curr = *cmd;
+    cmd_stack_node_t* next;
+
+    while(curr->command->type != BOTTOM) {
+        next = curr->next;
+        free(curr->command);
+        curr->command = NULL;
+        free(curr);
+        curr = NULL;
+        curr = next;
+    }
+    *cmd = curr;
+}
+
+/**
  * Pushes a line into the lines structure
  * @param line The line object
  * @param text the text (already alloc'd) to push
@@ -137,7 +156,19 @@ void push_line(txt_line_t** line, char* text) {
     tmp = (txt_line_t *)calloc(1, sizeof(txt_line_t));
     tmp->content = text;
     tmp->right = *line;
-    tmp->left = (*line != NULL) ? (*line)->left : NULL;
+    if(*line != NULL) {
+        tmp->left = (*line)->left;
+        if((*line)->left != NULL) {
+            (*line)->left->right = tmp;
+        }
+        (*line)->left = tmp;
+        if((*line)->content == NULL) {
+            free(*line);
+            tmp->right = NULL;
+        }
+    } else {
+        tmp->left = NULL;
+    }
     *line = tmp;
 }
 
@@ -239,7 +270,7 @@ void handle_delete(lines_stack_t* linesStack, del_list_node_t** delStack, long i
     *delStack = new_tmp;
 
     // shift linesStack
-    for(long int i = from - 1; i + delta < linesStack->size; i++) {
+    for(long int i = from - 1; i + delta <= linesStack->size; i++) {
         if(linesStack->lines[i + delta] == NULL) {
             linesStack->lines[i]->content = NULL;
             linesStack->lines[i]->right = NULL;
@@ -300,33 +331,18 @@ void slide_left_line(txt_line_t** line) {
  * Deletes all left nodes to the left: used after a permanent undo/redo to all involved lines.
  * @param line
  */
-void purge_left_list(txt_line_t* line) {
+void clear_left_list(txt_line_t* line) {
     txt_line_t* curr = line->left;
     txt_line_t* next;
     while(curr != NULL) {
         next = curr->left;
-        //free(curr->content);
-        //free(curr);
+        free(curr->content);
+        curr->content = NULL;
+        free(curr);
+        curr = NULL;
         curr = next;
     }
     line->left = NULL;
-}
-
-/**
- * Deletes all nodes into the undo command stack: used after a permanent undo/redo.
- * @param cmd the undo command structure *content* (not the head)
- */
-void purge_undo_stack(cmd_stack_node_t** cmd) {
-    cmd_stack_node_t* curr = *cmd;
-    cmd_stack_node_t* next;
-
-    while(curr->command->type != BOTTOM) {
-        next = curr->next;
-        //free(curr->command->args);
-        free(curr->command);
-        free(curr);
-        curr = next;
-    }
 }
 
 /**
@@ -352,7 +368,6 @@ void redo_change(lines_stack_t* linesStack, cmd_stack_node_t** cmd) {
         slide_right_line(&linesStack->lines[i]);
     }
 }
-
 
 /**
  * Undoes a delete operation.
@@ -382,7 +397,6 @@ void undo_delete(lines_stack_t* linesStack, del_list_node_t** delNode) {
 
     // shift all elements forward
     linesStack->size += (*delNode)->linesStack->size;
-    int k = 0;
     // shift
     for(long int i = linesStack->size - 1; i >= (*delNode)->linesStack->size; i--) {
         if(linesStack->lines[i] == NULL){
@@ -393,14 +407,14 @@ void undo_delete(lines_stack_t* linesStack, del_list_node_t** delNode) {
         linesStack->lines[i]->right = linesStack->lines[i - (*delNode)->linesStack->size]->right;
     }
     // re insert deleted lines
-    for (long int i = (*delNode)->linesStack->index - 1; i < (*delNode)->linesStack->size; i++) {
+    int k = 0;
+    for (long int i = (*delNode)->linesStack->index - 1; i < (*delNode)->linesStack->index + (*delNode)->linesStack->size - 1; i++) {
         linesStack->lines[i]->content = (*delNode)->linesStack->lines[k]->content;
         linesStack->lines[i]->right = (*delNode)->linesStack->lines[k]->right;
         linesStack->lines[i]->left = (*delNode)->linesStack->lines[k]->left;
         free((*delNode)->linesStack->lines[k]);
         k++;
     }
-
 
     // pop delNode List element
     del_list_node_t* tmp = (*delNode)->next;
@@ -429,7 +443,6 @@ void pop_cmd_free(cmd_head_t** cmdHead) {
     cmd_stack_node_t* tmp = (*cmdHead)->head;
     (*cmdHead)->head = (*cmdHead)->head->next;
     (*cmdHead)->size--;
-    //free(tmp->command->args);
     free(tmp->command);
     free(tmp);
 }
@@ -477,14 +490,26 @@ void handle_temp_undo(lines_stack_t* linesStack, del_list_node_t** delStack, cmd
 void handle_perm_undo(lines_stack_t* linesStack, del_list_node_t** delStack, cmd_head_t** cmdHead, cmd_head_t** undoHead, long int steps) {
     long int count = 0;
 
+    while((*undoHead)->head->command->type != BOTTOM) {
+        if((*undoHead)->head->command->type == CHANGE) {
+            for(long int i = (*undoHead)->head->command->args[0] - 1; i < (*undoHead)->head->command->args[1]; i++) {
+                clear_left_list(linesStack->lines[i]);
+            }
+        }
+        pop_cmd_free(undoHead);
+    }
+
     while((*cmdHead)->head->command->type != BOTTOM && count < steps) {
         // stack the commands to undo and undo them
         switch((*cmdHead)->head->command->type) {
         	case CHANGE:
         		undo_change(linesStack, &(*cmdHead)->head);
                 // purge left tail
-                for(long int i = (*cmdHead)->head->command->args[0] - 1; i < (*cmdHead)->head->command->args[1] - 1; i++) {
-                    purge_left_list(linesStack->lines[i]);
+                for(long int i = (*cmdHead)->head->command->args[0] - 1; i < (*cmdHead)->head->command->args[1]; i++) {
+                    clear_left_list(linesStack->lines[i]);
+                }
+                if(linesStack->lines[(*cmdHead)->head->command->args[0] - 1]->content == NULL) {
+                    linesStack->size -= (*cmdHead)->head->command->args[1] - (*cmdHead)->head->command->args[0] + 1;
                 }
         		break;
         	case DELETE:
@@ -496,10 +521,9 @@ void handle_perm_undo(lines_stack_t* linesStack, del_list_node_t** delStack, cmd
         // pop from cmdHead, no need to push it to undoHead
         pop_cmd_free(cmdHead);
         count++;
-
     }
-    // purge undo stack
-    purge_undo_stack(&(*undoHead)->head);
+
+    // (*undoHead)->size = 0;
 }
 
 /**
@@ -603,7 +627,7 @@ int main() {
     // command history
     cmd_head_t* cmdHead;
     cmd_head_t* undoHead;
-    
+
     cmdHead = (cmd_head_t *)malloc(sizeof(cmd_head_t));
     cmdHead->size = 0;
     undoHead = (cmd_head_t *)malloc(sizeof(cmd_head_t));
@@ -637,7 +661,8 @@ int main() {
                     handle_perm_undo(linesStack, &delList, &cmdHead, &undoHead, undo_count - redo_count);
                 } else if(redo_count > 0 && undo_count < redo_count) {
                     handle_temp_redo(linesStack, &delList, cmdHead, undoHead, redo_count - undo_count);
-                    purge_undo_stack(&undoHead->head);
+                    clear_undo_stack(&undoHead->head);
+                    undoHead->size = 0;
                 }
                 undo_count = 0;
                 redo_count = 0;
@@ -660,7 +685,8 @@ int main() {
                     handle_perm_undo(linesStack, &delList, &cmdHead, &undoHead, undo_count - redo_count);
                 } else if(redo_count > 0 && undo_count < redo_count) {
                     handle_temp_redo(linesStack, &delList, cmdHead, undoHead, redo_count - undo_count);
-                    purge_undo_stack(&undoHead->head);
+                    clear_undo_stack(&undoHead->head);
+                    undoHead->size = 0;
                 }
                 undo_count = 0;
                 redo_count = 0;
