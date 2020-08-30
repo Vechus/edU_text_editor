@@ -308,6 +308,12 @@ void handle_delete(lines_stack_t* linesStack, del_list_node_t** delStack, long i
             linesStack->lines[i]->right = NULL;
             linesStack->lines[i]->left = NULL;
         }
+    } else {
+        for(long int i = linesStack->size - delta; i < linesStack->size; i++) {
+            linesStack->lines[i]->content = NULL;
+            linesStack->lines[i]->right = NULL;
+            linesStack->lines[i]->left = NULL;
+        }
     }
     // resize stack
     linesStack->size = linesStack->size - delta;
