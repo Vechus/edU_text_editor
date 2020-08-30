@@ -19,7 +19,7 @@
 // TODO: fix duplicating pointers!
 
 #define INPUT_MAX_LENGTH 1025
-#define CAPACITY_CONST 100
+#define CAPACITY_CONST 10000
 //#define max(x,y) (x > y ? x : y)
 //#define DEBUG 1
 
@@ -164,6 +164,7 @@ void push_line(txt_line_t** line, char* text) {
         (*line)->left = tmp;
         if((*line)->content == NULL) {
             free(*line);
+            *line = NULL;
             tmp->right = NULL;
         }
     } else {
@@ -172,6 +173,23 @@ void push_line(txt_line_t** line, char* text) {
     *line = tmp;
 }
 
+/**
+ * Moves a line (from, to) properly.
+ * @param linesStack
+ * @param i_from
+ * @param i_to
+ */
+void move_line(lines_stack_t* linesStack, long int i_from, long int i_to) {
+    linesStack->lines[i_to]->content = linesStack->lines[i_from]->content;
+    linesStack->lines[i_to]->left = linesStack->lines[i_from]->left;
+    linesStack->lines[i_to]->right = linesStack->lines[i_from]->right;
+    if(linesStack->lines[i_to]->right != NULL) {
+        linesStack->lines[i_to]->right->left = linesStack->lines[i_to];
+    }
+    if(linesStack->lines[i_to]->left != NULL) {
+        linesStack->lines[i_to]->left->right = linesStack->lines[i_to];
+    }
+}
 /**
  * Handles change. For each line inputted after 'c' command it pushes the line in place.
  * If a line is occupied, the old line gets pushed to the right, and the new line is pointed by the structure.
@@ -183,6 +201,7 @@ void handle_change(lines_stack_t* linesStack, cmd *command) {
     char* input;
     char buff[INPUT_MAX_LENGTH];
 
+    // if a resize is necessary... do it.
     if(command->args[1] > linesStack->capacity) {
         linesStack->lines = (txt_line_t **)realloc(linesStack->lines, (command->args[1] + CAPACITY_CONST) * sizeof(txt_line_t*));
         for(long int i = linesStack->capacity; i < command->args[1] + CAPACITY_CONST; i++) {
@@ -191,7 +210,7 @@ void handle_change(lines_stack_t* linesStack, cmd *command) {
         linesStack->capacity = command->args[1] + CAPACITY_CONST;
     }
     if(command->args[1] > linesStack->size) linesStack->size = command->args[1];
-
+    // get input lines
     for(long int i = command->args[0] - 1; i <= command->args[1] - 1; i++) {
         fgets(buff, INPUT_MAX_LENGTH, stdin);
         input = (char *)malloc((strlen(buff) + 1) * sizeof(char));
@@ -238,10 +257,11 @@ void handle_print(lines_stack_t* linesStack, long int from, long int to) {
  * @param from
  * @param to
  */
-void handle_delete(lines_stack_t* linesStack, del_list_node_t** delStack, long int from, long int to) {
+void handle_delete(lines_stack_t* linesStack, del_list_node_t** delStack, long int* from, long int* to) {
     del_list_node_t* new_tmp;
-    register long int delta = (to < linesStack->size ? to : linesStack->size) - from + 1;
-    if(delta <= 0) {
+    if(*to >= linesStack->size) *to = linesStack->size;
+    register long int delta = *to - *from + 1;
+    if(delta <= 0 || linesStack->size == 0) {
         new_tmp = (del_list_node_t*) malloc(sizeof(del_list_node_t));
         new_tmp->next = *delStack;
         new_tmp->linesStack = (lines_stack_t*) malloc(sizeof(lines_stack_t));
@@ -255,37 +275,35 @@ void handle_delete(lines_stack_t* linesStack, del_list_node_t** delStack, long i
     new_tmp = (del_list_node_t*) malloc(sizeof(del_list_node_t));
     new_tmp->next = *delStack;
     new_tmp->linesStack = (lines_stack_t*) malloc(sizeof(lines_stack_t));
-    new_tmp->linesStack->index = from;
+    new_tmp->linesStack->index = *from;
     new_tmp->linesStack->lines = (txt_line_t**) calloc(delta, sizeof(txt_line_t*));
     new_tmp->linesStack->size = delta;
     new_tmp->linesStack->capacity = delta;
-    // copy sub array into the new array
+    // copy lines to delete into the delete node
     for(long int i = 0; i < delta; i++) {
         new_tmp->linesStack->lines[i] = (txt_line_t *)calloc(1, sizeof(txt_line_t));
-        new_tmp->linesStack->lines[i]->left = linesStack->lines[i + from - 1]->left;
-        new_tmp->linesStack->lines[i]->right = linesStack->lines[i + from - 1]->right;
-        new_tmp->linesStack->lines[i]->content = linesStack->lines[i + from - 1]->content;
+        new_tmp->linesStack->lines[i]->left = linesStack->lines[i + *from - 1]->left;
+        new_tmp->linesStack->lines[i]->right = linesStack->lines[i + *from - 1]->right;
+        new_tmp->linesStack->lines[i]->content = linesStack->lines[i + *from - 1]->content;
     }
     //memcpy(new_tmp->linesStack->lines, linesStack->lines + (from - 1), delta * sizeof(txt_line_t*));
     *delStack = new_tmp;
 
-    // shift linesStack
-    for(long int i = from - 1; i + delta <= linesStack->size; i++) {
+    // shift linesStack (fill the gap)
+    for(long int i = *from - 1; i + delta <= linesStack->size; i++) {
         if(linesStack->lines[i + delta] == NULL) {
             linesStack->lines[i]->content = NULL;
             linesStack->lines[i]->right = NULL;
             linesStack->lines[i]->left = NULL;
             continue;
         }
-        linesStack->lines[i]->content = linesStack->lines[i + delta]->content;
-        linesStack->lines[i]->right = linesStack->lines[i + delta]->right;
-        linesStack->lines[i]->left = linesStack->lines[i + delta]->left;
+        move_line(linesStack, i + delta, i);
         linesStack->lines[i + delta]->content = NULL;
         linesStack->lines[i + delta]->right = NULL;
         linesStack->lines[i + delta]->left = NULL;
     }
-    if(to >= linesStack->size) {
-        for(long int i = from - 1; i < linesStack->size; i++) {
+    if(*to >= linesStack->size) {
+        for(long int i = *from - 1; i < linesStack->size; i++) {
             linesStack->lines[i]->content = NULL;
             linesStack->lines[i]->right = NULL;
             linesStack->lines[i]->left = NULL;
@@ -334,14 +352,13 @@ void slide_left_line(txt_line_t** line) {
 void clear_left_list(txt_line_t* line) {
     txt_line_t* curr = line->left;
     txt_line_t* next;
+    /*
     while(curr != NULL) {
         next = curr->left;
         free(curr->content);
-        curr->content = NULL;
         free(curr);
-        curr = NULL;
         curr = next;
-    }
+    }*/
     line->left = NULL;
 }
 
@@ -388,7 +405,7 @@ void undo_delete(lines_stack_t* linesStack, del_list_node_t** delNode) {
     }
     if(linesStack->capacity < (*delNode)->linesStack->size + linesStack->size) {
         // re-alloc linesStack
-        linesStack->capacity = linesStack->size + CAPACITY_CONST;
+        linesStack->capacity = linesStack->size + (*delNode)->linesStack->size + CAPACITY_CONST;
         linesStack->lines = (txt_line_t **) realloc(linesStack->lines, (linesStack->capacity) * sizeof(txt_line_t*));
         for(long int i = linesStack->capacity - (*delNode)->linesStack->size; i < linesStack->capacity; i++) {
             linesStack->lines[i] = NULL;
@@ -398,13 +415,12 @@ void undo_delete(lines_stack_t* linesStack, del_list_node_t** delNode) {
     // shift all elements forward
     linesStack->size += (*delNode)->linesStack->size;
     // shift
-    for(long int i = linesStack->size - 1; i >= (*delNode)->linesStack->size; i--) {
+    for(long int i = linesStack->size - 1; i - (*delNode)->linesStack->size >= (*delNode)->linesStack->index - 1; i--) {
         if(linesStack->lines[i] == NULL){
+            // theoretically this if is useless AF
             linesStack->lines[i] = (txt_line_t *)calloc(1, sizeof(txt_line_t));
         }
-        linesStack->lines[i]->content = linesStack->lines[i - (*delNode)->linesStack->size]->content;
-        linesStack->lines[i]->left = linesStack->lines[i - (*delNode)->linesStack->size]->left;
-        linesStack->lines[i]->right = linesStack->lines[i - (*delNode)->linesStack->size]->right;
+        move_line(linesStack, i - (*delNode)->linesStack->size, i);
     }
     // re insert deleted lines
     int k = 0;
@@ -417,9 +433,9 @@ void undo_delete(lines_stack_t* linesStack, del_list_node_t** delNode) {
     }
 
     // pop delNode List element
-    del_list_node_t* tmp = (*delNode)->next;
+    del_list_node_t* next = (*delNode)->next;
     free(*delNode);
-    (*delNode) = tmp;
+    (*delNode) = next;
 }
 
 /**
@@ -478,6 +494,26 @@ void handle_temp_undo(lines_stack_t* linesStack, del_list_node_t** delStack, cmd
     }
 }
 
+void make_permanent_undo(lines_stack_t* linesStack, cmd_head_t** undoHead) {
+    long int old_size = linesStack->size;
+    for(long int i = 0; i < old_size; i++) {
+        clear_left_list(linesStack->lines[i]);
+        if(linesStack->lines[i]->content == NULL)
+            linesStack->size--;
+    }
+    clear_undo_stack(&(*undoHead)->head);
+    (*undoHead)->size = 0;
+    /*
+    while((*undoHead)->head->command->type != BOTTOM) {
+        if((*undoHead)->head->command->type == CHANGE) {
+            for(long int i = (*undoHead)->head->command->args[0] - 1; i < (*undoHead)->head->command->args[1]; i++) {
+                clear_left_list(linesStack->lines[i]);
+            }
+        }
+        pop_cmd_free(undoHead);
+    }*/
+}
+
 /**
  * Handles a permanent undo.
  * Iterates through the command stack, calls the right undo functions, pops command from the cmdHead and then purges the undo stack.
@@ -490,14 +526,9 @@ void handle_temp_undo(lines_stack_t* linesStack, del_list_node_t** delStack, cmd
 void handle_perm_undo(lines_stack_t* linesStack, del_list_node_t** delStack, cmd_head_t** cmdHead, cmd_head_t** undoHead, long int steps) {
     long int count = 0;
 
-    while((*undoHead)->head->command->type != BOTTOM) {
-        if((*undoHead)->head->command->type == CHANGE) {
-            for(long int i = (*undoHead)->head->command->args[0] - 1; i < (*undoHead)->head->command->args[1]; i++) {
-                clear_left_list(linesStack->lines[i]);
-            }
-        }
-        pop_cmd_free(undoHead);
-    }
+    // first, make sure the previously executed temporary undo are permanent
+    if((*undoHead)->size > 0)
+        make_permanent_undo(linesStack, undoHead);
 
     while((*cmdHead)->head->command->type != BOTTOM && count < steps) {
         // stack the commands to undo and undo them
@@ -522,8 +553,6 @@ void handle_perm_undo(lines_stack_t* linesStack, del_list_node_t** delStack, cmd
         pop_cmd_free(cmdHead);
         count++;
     }
-
-    // (*undoHead)->size = 0;
 }
 
 /**
@@ -546,7 +575,7 @@ void handle_temp_redo(lines_stack_t* linesStack, del_list_node_t** delStack, cmd
         		break;
         	case DELETE:
         		// re-perform deletion
-        		handle_delete(linesStack, delStack, undoHead->head->command->args[0], undoHead->head->command->args[1]);
+        		handle_delete(linesStack, delStack, &undoHead->head->command->args[0], &undoHead->head->command->args[1]);
         		break;
             default:
                 break;
@@ -609,6 +638,7 @@ cmd* parse_cmd() {
             break;
         default:
             puts("\nInvalid command format.\n");
+            putc(c, stdout);
             break;
     }
     return ret;
@@ -649,21 +679,26 @@ int main() {
     linesStack->size = 0;
     linesStack->capacity = CAPACITY_CONST;
 
+    long int command_count = 0;
+
     #ifdef DEBUG
         printf("WARNING: DEBUG MODE\n");
     #endif
 
     command = parse_cmd();
     while(command->type != QUIT) {
+        command_count++;
         switch (command->type) {
             case CHANGE:
                 if(undo_count > redo_count) {
+                    // permanent undo
                     handle_perm_undo(linesStack, &delList, &cmdHead, &undoHead, undo_count - redo_count);
                 } else if(redo_count > 0 && undo_count < redo_count) {
+                    // permanent redo
                     handle_temp_redo(linesStack, &delList, cmdHead, undoHead, redo_count - undo_count);
-                    clear_undo_stack(&undoHead->head);
-                    undoHead->size = 0;
+                    make_permanent_undo(linesStack, &undoHead);
                 }
+                if(undoHead->size > 0) make_permanent_undo(linesStack, &undoHead);
                 undo_count = 0;
                 redo_count = 0;
                 handle_change(linesStack, command);
@@ -682,15 +717,18 @@ int main() {
                 break;
             case DELETE:
                 if(undo_count > redo_count) {
+                    // permanent undo
                     handle_perm_undo(linesStack, &delList, &cmdHead, &undoHead, undo_count - redo_count);
                 } else if(redo_count > 0 && undo_count < redo_count) {
+                    // permanent redo
                     handle_temp_redo(linesStack, &delList, cmdHead, undoHead, redo_count - undo_count);
-                    clear_undo_stack(&undoHead->head);
-                    undoHead->size = 0;
+                    make_permanent_undo(linesStack, &undoHead);
                 }
+                if(undoHead->size > 0) make_permanent_undo(linesStack, &undoHead);
                 undo_count = 0;
                 redo_count = 0;
-                handle_delete(linesStack, &delList, command->args[0] + (command->args[0] <= 0 ? 1 : 0), command->args[1]);
+                handle_delete(linesStack, &delList, &command->args[0] + (command->args[0] <= 0 ? 1 : 0), &command->args[1]);
+                if(delList->linesStack->index == -1) command->args[1] = -1;
                 push_cmd(&cmdHead, command);
                 break;
             case UNDO:
