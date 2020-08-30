@@ -131,10 +131,14 @@ void move_cmd(cmd_head_t* from, cmd_head_t* to) {
  * Deletes all nodes into the undo command stack: used after a permanent undo/redo.
  * @param cmd the undo command structure *content* (not the head)
  */
-void clear_undo_stack(cmd_stack_node_t** cmd) {
-    cmd_stack_node_t* curr = *cmd;
+void clear_undo_stack(cmd_stack_node_t** command) {
+    // FIXME AIUTO LA FREE
+    (*command)->command = (cmd *) malloc(sizeof(cmd));
+    (*command)->command->type = BOTTOM;
+    (*command)->next = NULL;
+    /*
+    cmd_stack_node_t* curr = *command;
     cmd_stack_node_t* next;
-
     while(curr->command->type != BOTTOM) {
         next = curr->next;
         free(curr->command);
@@ -143,7 +147,7 @@ void clear_undo_stack(cmd_stack_node_t** cmd) {
         curr = NULL;
         curr = next;
     }
-    *cmd = curr;
+    *cmd = curr;*/
 }
 
 /**
@@ -153,7 +157,7 @@ void clear_undo_stack(cmd_stack_node_t** cmd) {
  */
 void push_line(txt_line_t** line, char* text) {
     txt_line_t* tmp;
-    tmp = (txt_line_t *)calloc(1, sizeof(txt_line_t));
+    tmp = (txt_line_t *)malloc(sizeof(txt_line_t));
     tmp->content = text;
     tmp->right = *line;
     if(*line != NULL) {
@@ -179,7 +183,9 @@ void push_line(txt_line_t** line, char* text) {
  * @param i_from
  * @param i_to
  */
-void move_line(lines_stack_t* linesStack, long int i_from, long int i_to) {
+inline void move_line(lines_stack_t* linesStack, long int i_from, long int i_to) {
+    linesStack->lines[i_to] = linesStack->lines[i_from];
+    /*
     linesStack->lines[i_to]->content = linesStack->lines[i_from]->content;
     linesStack->lines[i_to]->left = linesStack->lines[i_from]->left;
     linesStack->lines[i_to]->right = linesStack->lines[i_from]->right;
@@ -188,7 +194,7 @@ void move_line(lines_stack_t* linesStack, long int i_from, long int i_to) {
     }
     if(linesStack->lines[i_to]->left != NULL) {
         linesStack->lines[i_to]->left->right = linesStack->lines[i_to];
-    }
+    }*/
 }
 /**
  * Handles change. For each line inputted after 'c' command it pushes the line in place.
@@ -234,7 +240,7 @@ void handle_print(lines_stack_t* linesStack, long int from, long int to) {
     int count = 0;
     long int x = from - 1;
     while(count < delta + 1) {
-        if(x >= linesStack->size || x < 0 || linesStack->lines[x]->content == NULL) {
+        if(x >= linesStack->size || x < 0 || linesStack->lines[x] == NULL || linesStack->lines[x]->content == NULL) {
             fputs(".\n", stdout);
             count++;
         } else {
@@ -276,15 +282,18 @@ void handle_delete(lines_stack_t* linesStack, del_list_node_t** delStack, long i
     new_tmp->next = *delStack;
     new_tmp->linesStack = (lines_stack_t*) malloc(sizeof(lines_stack_t));
     new_tmp->linesStack->index = *from;
-    new_tmp->linesStack->lines = (txt_line_t**) calloc(delta, sizeof(txt_line_t*));
+    new_tmp->linesStack->lines = (txt_line_t**) malloc(delta * sizeof(txt_line_t*));
     new_tmp->linesStack->size = delta;
     new_tmp->linesStack->capacity = delta;
     // copy lines to delete into the delete node
     for(long int i = 0; i < delta; i++) {
-        new_tmp->linesStack->lines[i] = (txt_line_t *)calloc(1, sizeof(txt_line_t));
+        new_tmp->linesStack->lines[i] = linesStack->lines[i + *from - 1];
+        /*
+        new_tmp->linesStack->lines[i] = (txt_line_t *)malloc(sizeof(txt_line_t));
         new_tmp->linesStack->lines[i]->left = linesStack->lines[i + *from - 1]->left;
         new_tmp->linesStack->lines[i]->right = linesStack->lines[i + *from - 1]->right;
         new_tmp->linesStack->lines[i]->content = linesStack->lines[i + *from - 1]->content;
+         */
     }
     //memcpy(new_tmp->linesStack->lines, linesStack->lines + (from - 1), delta * sizeof(txt_line_t*));
     *delStack = new_tmp;
@@ -292,27 +301,39 @@ void handle_delete(lines_stack_t* linesStack, del_list_node_t** delStack, long i
     // shift linesStack (fill the gap)
     for(long int i = *from - 1; i + delta <= linesStack->size; i++) {
         if(linesStack->lines[i + delta] == NULL) {
+            linesStack->lines[i] = NULL;
+            /*
             linesStack->lines[i]->content = NULL;
             linesStack->lines[i]->right = NULL;
             linesStack->lines[i]->left = NULL;
+             */
             continue;
         }
         move_line(linesStack, i + delta, i);
+        linesStack->lines[i + delta] = NULL;
+        /*
         linesStack->lines[i + delta]->content = NULL;
         linesStack->lines[i + delta]->right = NULL;
         linesStack->lines[i + delta]->left = NULL;
+         */
     }
     if(*to >= linesStack->size) {
         for(long int i = *from - 1; i < linesStack->size; i++) {
+            linesStack->lines[i] = NULL;
+            /*
             linesStack->lines[i]->content = NULL;
             linesStack->lines[i]->right = NULL;
             linesStack->lines[i]->left = NULL;
+             */
         }
     } else {
         for(long int i = linesStack->size - delta; i < linesStack->size; i++) {
+            linesStack->lines[i] = NULL;
+            /*
             linesStack->lines[i]->content = NULL;
             linesStack->lines[i]->right = NULL;
             linesStack->lines[i]->left = NULL;
+             */
         }
     }
     // resize stack
@@ -333,7 +354,8 @@ void slide_right_line(txt_line_t** line) {
     (*line) = (*line)->left;
     (*line)->right = tmp;
     if((*line)->right->content == NULL) {
-        free((*line)->right);
+        // FIXME AIUTO LA FREE
+        //free((*line)->right);
         (*line)->right = NULL;
     }
 }
@@ -344,7 +366,8 @@ void slide_right_line(txt_line_t** line) {
  */
 void slide_left_line(txt_line_t** line) {
 	if((*line)->right == NULL) {
-		(*line)->right = (txt_line_t *) calloc(1, sizeof(txt_line_t));
+		(*line)->right = (txt_line_t *) malloc(sizeof(txt_line_t));
+        (*line)->right->content = NULL;
 	}
     txt_line_t* tmp = *line;
     (*line) = (*line)->right;
@@ -355,16 +378,7 @@ void slide_left_line(txt_line_t** line) {
  * Deletes all left nodes to the left: used after a permanent undo/redo to all involved lines.
  * @param line
  */
-void clear_left_list(txt_line_t* line) {
-    txt_line_t* curr = line->left;
-    txt_line_t* next;
-    /*
-    while(curr != NULL) {
-        next = curr->left;
-        free(curr->content);
-        free(curr);
-        curr = next;
-    }*/
+inline void clear_left_list(txt_line_t* line) {
     line->left = NULL;
 }
 
@@ -422,19 +436,21 @@ void undo_delete(lines_stack_t* linesStack, del_list_node_t** delNode) {
     linesStack->size += (*delNode)->linesStack->size;
     // shift
     for(long int i = linesStack->size - 1; i - (*delNode)->linesStack->size >= (*delNode)->linesStack->index - 1; i--) {
-        if(linesStack->lines[i] == NULL){
+        /*if(linesStack->lines[i] == NULL){
             // theoretically this if is useless AF
             linesStack->lines[i] = (txt_line_t *)calloc(1, sizeof(txt_line_t));
-        }
+        }*/
         move_line(linesStack, i - (*delNode)->linesStack->size, i);
     }
     // re insert deleted lines
     int k = 0;
     for (long int i = (*delNode)->linesStack->index - 1; i < (*delNode)->linesStack->index + (*delNode)->linesStack->size - 1; i++) {
+        linesStack->lines[i] = (*delNode)->linesStack->lines[k];
+        /*
         linesStack->lines[i]->content = (*delNode)->linesStack->lines[k]->content;
         linesStack->lines[i]->right = (*delNode)->linesStack->lines[k]->right;
         linesStack->lines[i]->left = (*delNode)->linesStack->lines[k]->left;
-        free((*delNode)->linesStack->lines[k]);
+        free((*delNode)->linesStack->lines[k]);*/
         k++;
     }
 
@@ -465,8 +481,9 @@ void pop_cmd_free(cmd_head_t** cmdHead) {
     cmd_stack_node_t* tmp = (*cmdHead)->head;
     (*cmdHead)->head = (*cmdHead)->head->next;
     (*cmdHead)->size--;
-    free(tmp->command);
-    free(tmp);
+    // FIXME AIUTO LA FREE
+    //free(tmp->command);
+    //free(tmp);
 }
 
 /**
@@ -681,6 +698,7 @@ int main() {
 
     linesStack = (lines_stack_t *)malloc(sizeof(lines_stack_t));
     linesStack->index = 0;
+    // TODO changing things and seeing what happens
     linesStack->lines = (txt_line_t **)calloc(CAPACITY_CONST, sizeof(txt_line_t*));
     linesStack->size = 0;
     linesStack->capacity = CAPACITY_CONST;
