@@ -2,8 +2,6 @@
 #include <stdbool.h>
 #include <string.h>
 #include <stdlib.h>
-#include <ctype.h>
-#include <math.h>
 
 /**
  * IDEA: potrei mantenere ogni deleted chunk all'interno della struttura,
@@ -20,8 +18,6 @@
 
 #define INPUT_MAX_LENGTH 1025
 #define CAPACITY_CONST 10000
-//#define max(x,y) (x > y ? x : y)
-//#define DEBUG 1
 
 // commands in enum (BOTTOM is an auxiliary command that represents the bottom of the stack)
 enum cmd_type {CHANGE, DELETE, PRINT, UNDO, REDO, QUIT, BOTTOM};
@@ -137,6 +133,7 @@ void clear_undo_stack(cmd_stack_node_t** command) {
     (*command)->command->type = BOTTOM;
     (*command)->next = NULL;
     /*
+     * // free has been commented to save time
     cmd_stack_node_t* curr = *command;
     cmd_stack_node_t* next;
     while(curr->command->type != BOTTOM) {
@@ -185,16 +182,6 @@ void push_line(txt_line_t** line, char* text) {
  */
 inline void move_line(lines_stack_t* linesStack, long int i_from, long int i_to) {
     linesStack->lines[i_to] = linesStack->lines[i_from];
-    /*
-    linesStack->lines[i_to]->content = linesStack->lines[i_from]->content;
-    linesStack->lines[i_to]->left = linesStack->lines[i_from]->left;
-    linesStack->lines[i_to]->right = linesStack->lines[i_from]->right;
-    if(linesStack->lines[i_to]->right != NULL) {
-        linesStack->lines[i_to]->right->left = linesStack->lines[i_to];
-    }
-    if(linesStack->lines[i_to]->left != NULL) {
-        linesStack->lines[i_to]->left->right = linesStack->lines[i_to];
-    }*/
 }
 /**
  * Handles change. For each line inputted after 'c' command it pushes the line in place.
@@ -288,12 +275,6 @@ void handle_delete(lines_stack_t* linesStack, del_list_node_t** delStack, long i
     // copy lines to delete into the delete node
     for(long int i = 0; i < delta; i++) {
         new_tmp->linesStack->lines[i] = linesStack->lines[i + *from - 1];
-        /*
-        new_tmp->linesStack->lines[i] = (txt_line_t *)malloc(sizeof(txt_line_t));
-        new_tmp->linesStack->lines[i]->left = linesStack->lines[i + *from - 1]->left;
-        new_tmp->linesStack->lines[i]->right = linesStack->lines[i + *from - 1]->right;
-        new_tmp->linesStack->lines[i]->content = linesStack->lines[i + *from - 1]->content;
-         */
     }
     //memcpy(new_tmp->linesStack->lines, linesStack->lines + (from - 1), delta * sizeof(txt_line_t*));
     *delStack = new_tmp;
@@ -302,38 +283,18 @@ void handle_delete(lines_stack_t* linesStack, del_list_node_t** delStack, long i
     for(long int i = *from - 1; i + delta <= linesStack->size; i++) {
         if(linesStack->lines[i + delta] == NULL) {
             linesStack->lines[i] = NULL;
-            /*
-            linesStack->lines[i]->content = NULL;
-            linesStack->lines[i]->right = NULL;
-            linesStack->lines[i]->left = NULL;
-             */
             continue;
         }
         move_line(linesStack, i + delta, i);
         linesStack->lines[i + delta] = NULL;
-        /*
-        linesStack->lines[i + delta]->content = NULL;
-        linesStack->lines[i + delta]->right = NULL;
-        linesStack->lines[i + delta]->left = NULL;
-         */
     }
     if(*to >= linesStack->size) {
         for(long int i = *from - 1; i < linesStack->size; i++) {
             linesStack->lines[i] = NULL;
-            /*
-            linesStack->lines[i]->content = NULL;
-            linesStack->lines[i]->right = NULL;
-            linesStack->lines[i]->left = NULL;
-             */
         }
     } else {
         for(long int i = linesStack->size - delta; i < linesStack->size; i++) {
             linesStack->lines[i] = NULL;
-            /*
-            linesStack->lines[i]->content = NULL;
-            linesStack->lines[i]->right = NULL;
-            linesStack->lines[i]->left = NULL;
-             */
         }
     }
     // resize stack
@@ -417,40 +378,33 @@ void redo_change(lines_stack_t* linesStack, cmd_stack_node_t** cmd) {
  * @param delNode
  */
 void undo_delete(lines_stack_t* linesStack, del_list_node_t** delNode) {
-    if((*delNode)->linesStack->index == -1) {
+    long int i1 = (*delNode)->linesStack->index;
+    if(i1 == -1) {
         del_list_node_t* tmp = (*delNode)->next;
         free(*delNode);
         (*delNode) = tmp;
         return;
     }
-    if(linesStack->capacity < (*delNode)->linesStack->size + linesStack->size) {
+    long int size = (*delNode)->linesStack->size;
+    if(linesStack->capacity < size + linesStack->size) {
         // re-alloc linesStack
-        linesStack->capacity = linesStack->size + (*delNode)->linesStack->size + CAPACITY_CONST;
+        linesStack->capacity = linesStack->size + size + CAPACITY_CONST;
         linesStack->lines = (txt_line_t **) realloc(linesStack->lines, (linesStack->capacity) * sizeof(txt_line_t*));
-        for(long int i = linesStack->capacity - (*delNode)->linesStack->size; i < linesStack->capacity; i++) {
+        for(long int i = linesStack->capacity - size; i < linesStack->capacity; i++) {
             linesStack->lines[i] = NULL;
         }
     }
 
     // shift all elements forward
-    linesStack->size += (*delNode)->linesStack->size;
+    linesStack->size += size;
     // shift
-    for(long int i = linesStack->size - 1; i - (*delNode)->linesStack->size >= (*delNode)->linesStack->index - 1; i--) {
-        /*if(linesStack->lines[i] == NULL){
-            // theoretically this if is useless AF
-            linesStack->lines[i] = (txt_line_t *)calloc(1, sizeof(txt_line_t));
-        }*/
-        move_line(linesStack, i - (*delNode)->linesStack->size, i);
+    for(long int i = linesStack->size - 1; i - size >= i1 - 1; i--) {
+        move_line(linesStack, i - size, i);
     }
     // re insert deleted lines
     int k = 0;
-    for (long int i = (*delNode)->linesStack->index - 1; i < (*delNode)->linesStack->index + (*delNode)->linesStack->size - 1; i++) {
+    for (long int i = i1 - 1; i < i1 + size - 1; i++) {
         linesStack->lines[i] = (*delNode)->linesStack->lines[k];
-        /*
-        linesStack->lines[i]->content = (*delNode)->linesStack->lines[k]->content;
-        linesStack->lines[i]->right = (*delNode)->linesStack->lines[k]->right;
-        linesStack->lines[i]->left = (*delNode)->linesStack->lines[k]->left;
-        free((*delNode)->linesStack->lines[k]);*/
         k++;
     }
 
@@ -559,11 +513,13 @@ void handle_perm_undo(lines_stack_t* linesStack, del_list_node_t** delStack, cmd
         	case CHANGE:
         		undo_change(linesStack, &(*cmdHead)->head);
                 // purge left tail
-                for(long int i = (*cmdHead)->head->command->args[0] - 1; i < (*cmdHead)->head->command->args[1]; i++) {
+                long int i1 = (*cmdHead)->head->command->args[0];
+                long int i2 = (*cmdHead)->head->command->args[1];
+                for(long int i = i1 - 1; i < i2; i++) {
                     clear_left_list(linesStack->lines[i]);
                 }
-                if(linesStack->lines[(*cmdHead)->head->command->args[0] - 1]->content == NULL) {
-                    linesStack->size -= (*cmdHead)->head->command->args[1] - (*cmdHead)->head->command->args[0] + 1;
+                if(linesStack->lines[i1 - 1]->content == NULL) {
+                    linesStack->size -= i2 - i1 + 1;
                 }
         		break;
         	case DELETE:
@@ -703,7 +659,6 @@ int main() {
     linesStack->size = 0;
     linesStack->capacity = CAPACITY_CONST;
 
-    long int command_count = 0;
 
     #ifdef DEBUG
         printf("WARNING: DEBUG MODE\n");
@@ -711,7 +666,6 @@ int main() {
 
     command = parse_cmd();
     while(command->type != QUIT) {
-        command_count++;
         switch (command->type) {
             case CHANGE:
                 if(undo_count > redo_count) {
