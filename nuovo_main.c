@@ -8,10 +8,11 @@
 #include <stdlib.h>
 
 #define INPUT_MAX_LENGTH 1025
-#define CAPACITY_CONST 1
-#define INIT_SNAP_LEN 10000
-#define INIT_CMD_LEN 10000
-#define INIT_INDEXES_LEN 6000
+#define CAPACITY_CONST 500
+#define INIT_SNAP_LEN 1000
+#define INCREASE_CONST 500
+#define INIT_CMD_LEN 1000
+#define INIT_INDEXES_LEN 1000
 
 enum cmd_type {CHANGE, DELETE, PRINT, UNDO, REDO, QUIT, BOTTOM};
 
@@ -41,8 +42,21 @@ typedef struct {
 
 typedef struct int_array_s {
     int size;
+    int capacity;
     int *array;
 }int_array_t;
+
+void copy_editor(snapshot_t *editor, snapshot_t *dest) {
+    dest->size = editor->size;
+    dest->capacity = dest->size + CAPACITY_CONST;
+    dest->lines = (char **) malloc((dest->size + CAPACITY_CONST) * sizeof(char *));
+    for(int i = 0; i < dest->size; i++) {
+        dest->lines[i] = editor->lines[i];
+    }
+    for(int i = dest->size; i < dest->capacity; i++) {
+        dest->lines[i] = NULL;
+    }
+}
 
 /**
  * Handles print. Iterates through the lines structure, if the line has null content it prints '.\n',
@@ -93,6 +107,54 @@ void handle_change(snapshot_t *editor, command_t *command) {
     // .\n
     getchar_unlocked();
     getchar_unlocked();
+}
+
+void handle_delete(snapshot_t *editor, snapshot_t **snapshot, int snap_size, int arg1, int arg2) {
+    int from, to;
+    if(arg1 <= 0) {
+        from = 1;
+    } else {
+        from = arg1;
+    }
+    if(arg2 > editor->size) {
+        to = editor->size;
+    } else {
+        to = arg2;
+    }
+    int delta = to - from + 1;
+    if(delta <= 0) {
+        // invalid delete, copy whole editor
+        copy_editor(editor, snapshot[snap_size]);
+        return;
+    }
+    snapshot[snap_size]->lines = (char **) malloc((editor->size - delta) * sizeof(char *));
+    // copy first part
+    for(int i = 0; i < from - 1; i++) {
+        snapshot[snap_size]->lines[i] = editor->lines[i];
+    }
+    for(int i = from - 1; i + delta < editor->size; i++) {
+        if(editor->lines[i + delta] == NULL) {
+            editor->lines[i] = NULL;
+            continue;
+        }
+        // shifted line
+        editor->lines[i] = editor->lines[i + delta];
+        editor->lines[i + delta] = NULL;
+        // copy shifted line
+        snapshot[snap_size]->lines[i] = editor->lines[i];
+    }
+    if(to == editor->size) {
+        for(int i = from - 1; i < editor->size; i++) {
+            editor->lines[i] = NULL;
+        }
+    } else {
+        for(int i = editor->size - delta; i < editor->size; i++) {
+            editor->lines[i] = NULL;
+        }
+    }
+    editor->size -= delta;
+    snapshot[snap_size]->size = editor->size;
+    snapshot[snap_size]->capacity = editor->size;
 }
 
 /**
@@ -159,6 +221,9 @@ int main() {
     for(int i = 0; i < INIT_SNAP_LEN; i++) {
         snapshots[i] = (snapshot_t *) malloc(sizeof(snapshot_t));
     }
+    int snap_capacity = INIT_SNAP_LEN;
+    int snap_size = 0;
+
     snapshots[0]->index = 0;
     snapshots[0]->size = 0;
     snapshots[0]->capacity = CAPACITY_CONST;
@@ -175,6 +240,7 @@ int main() {
     int_array_t *snap_indexes = (int_array_t *) malloc(sizeof(int_array_t));
     snap_indexes->array = (int *) malloc(INIT_INDEXES_LEN * sizeof(int));
     snap_indexes->size = 0;
+    snap_indexes->capacity = INIT_INDEXES_LEN;
     snap_indexes->array[0] = 0;
 
     snapshot_t *editor = (snapshot_t *) malloc(sizeof(snapshot_t));
@@ -210,9 +276,14 @@ int main() {
                 redo_count = 0;
                 handle_change(editor, commandWrap->commands[commandWrap->size]);
                 commandWrap->size++;
-                if(commandWrap->size > commandWrap->capacity) {
+                // resize commandWrap if needed
+                if(commandWrap->size >= commandWrap->capacity) {
                     commandWrap->commands = (command_t **) realloc(commandWrap->commands,
                                                                    (commandWrap->size + INIT_CMD_LEN) * sizeof(command_t *));
+                    for(int i = commandWrap->size; i < commandWrap->size + INIT_CMD_LEN; i++) {
+                        commandWrap->commands[i] = (command_t *) malloc(sizeof(command_t));
+                    }
+                    commandWrap->capacity = commandWrap->size + INIT_CMD_LEN;
                 }
                 break;
             case PRINT:
@@ -226,8 +297,28 @@ int main() {
                 redo_count = 0;
                 handle_print(editor, curr_cmd->args[0], curr_cmd->args[1]);
                 break;
-            /*case DELETE:
+            case DELETE:
                 command_counter++;
+                snap_size++;
+                // resize snapshot structure if needed
+                if(snap_size >= snap_capacity) {
+                    snapshots = (snapshot_t **) realloc(snapshots, (snap_size + INCREASE_CONST) * sizeof(snapshot_t *));
+                    snap_capacity = snap_size + INCREASE_CONST;
+                    for(int i = snap_size; i < snap_capacity; i++) {
+                        snapshots[i] = (snapshot_t *) malloc(sizeof(snapshot_t));
+                    }
+                }
+                snap_indexes->size++;
+                // resize indexes structure if needed
+                if(snap_indexes->size >= snap_indexes->capacity) {
+                    snap_indexes->array = (int *) realloc(snap_indexes->array, (snap_indexes->size + INCREASE_CONST) * sizeof(int));
+                    snap_indexes->capacity = snap_indexes->size + INCREASE_CONST;
+                }
+                snap_indexes->array[snap_indexes->size] = command_counter;
+                snapshots[snap_size]->index = command_counter;
+                handle_delete(editor, snapshots, snap_size, curr_cmd->args[0], curr_cmd->args[1]);
+
+                /*
                 if(undo_count > redo_count) {
                     // permanent undo
                     handle_perm_undo(linesStack, &delList, &cmdHead, &undoHead, undo_count - redo_count);
@@ -241,8 +332,8 @@ int main() {
                 redo_count = 0;
                 handle_delete(linesStack, &delList, &curr_cmd->args[0] + (curr_cmd->args[0] <= 0 ? 1 : 0), &curr_cmd->args[1]);
                 if(delList->linesStack->index == -1) curr_cmd->args[1] = -1;
-                push_cmd(&cmdHead, curr_cmd);
-                break;*/
+                push_cmd(&cmdHead, curr_cmd);*/
+                break;
             case UNDO:
                 undo_count += curr_cmd->args[0];
                 // cap undo value
