@@ -1,16 +1,81 @@
 /**
- * WELCOME TO MY API PROJECT LMAO
- */
+██╗    ██╗███████╗██╗      ██████╗ ██████╗ ███╗   ███╗███████╗
+██║    ██║██╔════╝██║     ██╔════╝██╔═══██╗████╗ ████║██╔════╝
+██║ █╗ ██║█████╗  ██║     ██║     ██║   ██║██╔████╔██║█████╗
+██║███╗██║██╔══╝  ██║     ██║     ██║   ██║██║╚██╔╝██║██╔══╝
+╚███╔███╔╝███████╗███████╗╚██████╗╚██████╔╝██║ ╚═╝ ██║███████╗
+ ╚══╝╚══╝ ╚══════╝╚══════╝ ╚═════╝ ╚═════╝ ╚═╝     ╚═╝╚══════╝
 
+████████╗ ██████╗
+╚══██╔══╝██╔═══██╗
+   ██║   ██║   ██║
+   ██║   ██║   ██║
+   ██║   ╚██████╔╝
+   ╚═╝    ╚═════╝
+
+███╗   ███╗██╗   ██╗     █████╗ ██████╗ ██╗    ██████╗ ██████╗  ██████╗      ██╗███████╗ ██████╗████████╗
+████╗ ████║╚██╗ ██╔╝    ██╔══██╗██╔══██╗██║    ██╔══██╗██╔══██╗██╔═══██╗     ██║██╔════╝██╔════╝╚══██╔══╝
+██╔████╔██║ ╚████╔╝     ███████║██████╔╝██║    ██████╔╝██████╔╝██║   ██║     ██║█████╗  ██║        ██║
+██║╚██╔╝██║  ╚██╔╝      ██╔══██║██╔═══╝ ██║    ██╔═══╝ ██╔══██╗██║   ██║██   ██║██╔══╝  ██║        ██║
+██║ ╚═╝ ██║   ██║       ██║  ██║██║     ██║    ██║     ██║  ██║╚██████╔╝╚█████╔╝███████╗╚██████╗   ██║
+╚═╝     ╚═╝   ╚═╝       ╚═╝  ╚═╝╚═╝     ╚═╝    ╚═╝     ╚═╝  ╚═╝ ╚═════╝  ╚════╝ ╚══════╝ ╚═════╝   ╚═╝
+
+
+Sponsored by Long Doge
+░░░░░░░░░░░░░░░░░░░░░░░
+░░░▄▄░░░░░░░░░░░▄▄░░░░░
+░░░█░▀▄░░░░░░░▄▀░█░░░░░
+░░░█░░░▀█▀▀▀▀█░░░█░░░░░
+░░▄▀░░░░▀░░░░░░░░░█░░░░
+░░█░░░░░░░░░░░░░░░░█░░░
+░▄▀░░░░░▄▄░░░░██░▄▄░█░░
+░█░░░▀▀░▀▀░░░░░░▄░░░░█░
+░█░░░░░░▄░░░███░░█░░░█░
+░█░░░░░░░█▄▄▄█▄▄▀░░░░█░
+░█░░░░░░▀▄▀█▀▀█▀░░░░░█░
+░█░░░░░░░░▀█▄▄▀░░░░░░█░
+░█░░░░░░░░░░░░░░░░░░░█░
+░█░░░░░░░░░░░░░░░░░░░█░
+░█░░░░░░░░░░░░░░░░░░░█░
+░█░░░░░░░░░░░░░░░░░░░█░
+░█░░░░░░░░░░░░░░░░░░░█░
+░█░░░░░░░░░░░░░░░░░░░█░
+░█░░░░░░░░░░░░░░░░░░░█░
+░█░░░░░░░░░░░░░░░░░░░█░
+░█░░░░░░░░░░░░░░░░░░░█░
+
+ ░░░░░░░░░▄░░░░░░░░░░░░░░▄░░░░
+░░░░░░░░▌▒█░░░░░░░░░░░▄▀▒▌░░░
+░░░░░░░░▌▒▒█░░░░░░░░▄▀▒▒▒▐░░░
+░░░░░░░▐▄▀▒▒▀▀▀▀▄▄▄▀▒▒▒▒▒▐░░░
+░░░░░▄▄▀▒░▒▒▒▒▒▒▒▒▒█▒▒▄█▒▐░░░
+░░░▄▀▒▒▒░░░▒▒▒░░░▒▒▒▀██▀▒▌░░░
+░░▐▒▒▒▄▄▒▒▒▒░░░▒▒▒▒▒▒▒▀▄▒▒▌░░
+░░▌░░▌█▀▒▒▒▒▒▄▀█▄▒▒▒▒▒▒▒█▒▐░░
+░▐░░░▒▒▒▒▒▒▒▒▌██▀▒▒░░░▒▒▒▀▄▌░
+░▌░▒▄██▄▒▒▒▒▒▒▒▒▒░░░░░░▒▒▒▒▌░
+▀▒▀▐▄█▄█▌▄░▀▒▒░░░░░░░░░░▒▒▒▐░
+▐▒▒▐▀▐▀▒░▄▄▒▄▒▒▒▒▒▒░▒░▒░▒▒▒▒▌
+▐▒▒▒▀▀▄▄▒▒▒▄▒▒▒▒▒▒▒▒░▒░▒░▒▒▐░
+░▌▒▒▒▒▒▒▀▀▀▒▒▒▒▒▒░▒░▒░▒░▒▒▒▌░
+░▐▒▒▒▒▒▒▒▒▒▒▒▒▒▒░▒░▒░▒▒▄▒▒▐░░
+░░▀▄▒▒▒▒▒▒▒▒▒▒▒░▒░▒░▒▄▒▒▒▒▌░░
+░░░░▀▄▒▒▒▒▒▒▒▒▒▒▄▄▄▀▒▒▒▒▄▀░░░
+░░░░░░▀▄▄▄▄▄▄▀▀▀▒▒▒▒▒▄▄▀░░░░░
+░░░░░░░░░▒▒▒▒▒▒▒▒▒▒▀▀░░░░░░░░
+
+ ok mi sentivo solo, era la mia unica compagnia durante le mie pesantissime sessioni di coding.
+ Ringrazio il long doge e Cookie (il mio gatto) per questa struttura dati.
+ */
 #include <stdio.h>
 #include <stdbool.h>
 #include <string.h>
 #include <stdlib.h>
 
 #define INPUT_MAX_LENGTH 1025
-#define CAPACITY_CONST 500
+#define CAPACITY_CONST 100
 #define INIT_SNAP_LEN 1000
-#define INCREASE_CONST 500
+#define INCREASE_CONST 100
 #define INIT_CMD_LEN 1000
 #define INIT_INDEXES_LEN 1000
 
@@ -56,6 +121,39 @@ void copy_editor(snapshot_t *editor, snapshot_t *dest) {
     for(int i = dest->size; i < dest->capacity; i++) {
         dest->lines[i] = NULL;
     }
+}
+
+void pass_to_snapshot(snapshot_t *editor, snapshot_t *dest) {
+    int size = dest->size;
+    if(editor->capacity < dest->capacity) {
+        editor->lines = (char **) realloc(editor->lines, (dest->capacity + CAPACITY_CONST) * sizeof(char *));
+        for(int i = size; i < dest->capacity + CAPACITY_CONST; i++) {
+            editor->lines[i] = NULL;
+        }
+        editor->capacity = dest->capacity + CAPACITY_CONST;
+    }
+    editor->size = size;
+    for(int i = 0; i < size; i++) {
+        editor->lines[i] = dest->lines[i];
+    }
+    editor->index = dest->index;
+}
+
+/**
+ * Gets the target snapshot to return to.
+ * @param snapshots
+ * @param snap_size
+ * @param target_command
+ * @return the index of the snapshot to return to
+ */
+int backward_search_snapshot(snapshot_t **snapshots, int snap_size, int target_command) {
+    if(target_command >= snapshots[snap_size]->index) return snap_size;
+    for(int i = snap_size; i > 0; i--) {
+        if(target_command >= snapshots[i - 1]->index && target_command < snapshots[i]->index) {
+            return i - 1;
+        }
+    }
+    return 0;
 }
 
 /**
@@ -109,6 +207,24 @@ void handle_change(snapshot_t *editor, command_t *command) {
     getchar_unlocked();
 }
 
+void redo_change(snapshot_t *editor, command_t *command) {
+    int arg2 = command->arg2;
+    int arg1 = command->arg1;
+
+    if(arg2 > editor->capacity) {
+        editor->lines = (char **) realloc(editor->lines, (arg2 + CAPACITY_CONST) * sizeof(char *));
+        for(int i = editor->capacity; i < arg2 + CAPACITY_CONST; i++) {
+            editor->lines[i] = NULL;
+        }
+        editor->capacity = arg2 + CAPACITY_CONST;
+    }
+    if(arg2 > editor->size) editor->size = arg2;
+
+    for(int i = arg1 - 1; i <= arg2 - 1; i++) {
+        editor->lines[i] = command->content_lines[i - arg1 + 1];
+    }
+}
+
 void handle_delete(snapshot_t *editor, snapshot_t **snapshot, int snap_size, int arg1, int arg2) {
     int from, to;
     if(arg1 <= 0) {
@@ -157,6 +273,61 @@ void handle_delete(snapshot_t *editor, snapshot_t **snapshot, int snap_size, int
     snapshot[snap_size]->capacity = editor->size;
 }
 
+void handle_undo(snapshot_t **snapshots, snapshot_t *editor,  command_wrap_t *commandWrap, int undo_count, int redo_count, int snap_size, int *command_counter, int *executed_undos, int *curr_snap) {
+    // find the right snapshot to jump back to
+    int target;
+    if(undo_count - redo_count >= *command_counter)
+        target = 0;
+    else
+        target = backward_search_snapshot(snapshots, snap_size, *command_counter - (undo_count - redo_count));
+    // copy snapshot into editor
+    pass_to_snapshot(editor, snapshots[target]);
+    *curr_snap = target;
+    // shift back to the right command (command counter)
+    *command_counter -= undo_count - redo_count;
+    // execute changes until counter reaches command_counter - (undo_count - redo_count)
+    for(int i = snapshots[target]->index - target; i < *command_counter - target; i++) {
+        redo_change(editor, commandWrap->commands[i]);
+    }
+    *executed_undos += undo_count - redo_count;
+}
+
+void handle_redo(snapshot_t **snapshots, snapshot_t *editor,  command_wrap_t *commandWrap, int steps, int snap_size, int *command_counter, int *curr_snap) {
+    // find right snapshot to jump forward to (if needed)
+    int target = backward_search_snapshot(snapshots, snap_size, *command_counter + (steps));
+    if(target != *curr_snap) {
+        *curr_snap = target;
+        // (if needed) copy new snapshot into editor
+        pass_to_snapshot(editor, snapshots[target]);
+    }
+    *command_counter += steps;
+    // execute changes until command_counter - (redo_count - undo_count) is reached
+    for(int i = snapshots[target]->index - target; i < *command_counter - target; i++) {
+        redo_change(editor, commandWrap->commands[i]);
+    }
+}
+
+void make_permanent(snapshot_t **snapshots, command_wrap_t *commandWrap, int curr_snap, int snap_size, int curr_change) {
+    // delete all snapshots with index > curr_snap
+    for(int i = curr_snap + 1; i <= snap_size; i++) {
+        snapshots[i]->index = 0;
+        snapshots[i]->size = 0;
+        free(snapshots[i]->lines);
+        snapshots[i]->lines = NULL;
+        snapshots[i]->capacity = 0;
+    }
+    // delete all commands with index > curr_change
+    for(int i = curr_change; i < commandWrap->size; i++) {
+        for(int j = 0; j < commandWrap->commands[i]->arg2 - commandWrap->commands[i]->arg1 + 1; j++) {
+            free(commandWrap->commands[i]->content_lines[j]);
+        }
+        free(commandWrap->commands[i]->content_lines);
+        commandWrap->commands[i]->content_lines = NULL;
+        commandWrap->commands[i]->arg1 = 0;
+        commandWrap->commands[i]->arg2 = 0;
+    }
+    commandWrap->size = curr_change;
+}
 /**
  * Parses commands
  * @return
@@ -237,11 +408,11 @@ int main() {
         commandWrap->commands[i] = (command_t *) malloc(sizeof(command_t));
     }
 
-    int_array_t *snap_indexes = (int_array_t *) malloc(sizeof(int_array_t));
+    /*int_array_t *snap_indexes = (int_array_t *) malloc(sizeof(int_array_t));
     snap_indexes->array = (int *) malloc(INIT_INDEXES_LEN * sizeof(int));
     snap_indexes->size = 0;
     snap_indexes->capacity = INIT_INDEXES_LEN;
-    snap_indexes->array[0] = 0;
+    snap_indexes->array[0] = 0;*/
 
     snapshot_t *editor = (snapshot_t *) malloc(sizeof(snapshot_t));
     editor->lines = (char **) calloc(CAPACITY_CONST, sizeof(char *));
@@ -251,29 +422,37 @@ int main() {
 
     cmd* curr_cmd;
     int undo_count = 0;
+    int curr_snap = 0;
     int redo_count = 0;
     int command_counter = 0;
     int executed_undos = 0;
+    int tot = 0;
 
     curr_cmd = parse_cmd();
     while(curr_cmd->type != QUIT) {
+        tot++;
         switch (curr_cmd->type) {
             case CHANGE:
+                if(undo_count > redo_count) {
+                    // permanent undo
+                    handle_undo(snapshots, editor, commandWrap, undo_count, redo_count, snap_size, &command_counter, &executed_undos, &curr_snap);
+                    make_permanent(snapshots, commandWrap, curr_snap, snap_size, command_counter - curr_snap);
+                    snap_size = curr_snap;
+                } else if(redo_count > 0 && undo_count < redo_count) {
+                    // permanent redo
+                    handle_redo(snapshots, editor, commandWrap, redo_count - undo_count, snap_size, &command_counter, &curr_snap);
+                    make_permanent(snapshots, commandWrap, curr_snap, snap_size, command_counter - curr_snap);
+                    snap_size = curr_snap;
+                } else if(executed_undos > 0) {
+                    make_permanent(snapshots, commandWrap, curr_snap, snap_size, command_counter - curr_snap);
+                    snap_size = curr_snap;
+                }
+                executed_undos = 0;
+                undo_count = 0;
+                redo_count = 0;
                 command_counter++;
                 commandWrap->commands[commandWrap->size]->arg1 = curr_cmd->args[0];
                 commandWrap->commands[commandWrap->size]->arg2 = curr_cmd->args[1];
-                
-                /*if(undo_count > redo_count) {
-                    // permanent undo
-                    handle_perm_undo(linesStack, &delList, &cmdHead, &undoHead, undo_count - redo_count);
-                } else if(redo_count > 0 && undo_count < redo_count) {
-                    // permanent redo
-                    handle_temp_redo(linesStack, &delList, cmdHead, undoHead, redo_count - undo_count);
-                    make_permanent_undo(linesStack, &undoHead);
-                }
-                if(undoHead->size > 0) make_permanent_undo(linesStack, &undoHead);*/
-                undo_count = 0;
-                redo_count = 0;
                 handle_change(editor, commandWrap->commands[commandWrap->size]);
                 commandWrap->size++;
                 // resize commandWrap if needed
@@ -287,19 +466,38 @@ int main() {
                 }
                 break;
             case PRINT:
-                // first handle undos/redos (both functions end in case the curr_cmd stack / undo stack gets depleted)
-                /*if(undo_count > redo_count) {
-                    handle_temp_undo(linesStack, &delList, cmdHead, undoHead, undo_count - redo_count);
+                // handle undos/redos
+                if(undo_count > redo_count) {
+                    handle_undo(snapshots, editor, commandWrap, undo_count, redo_count, snap_size, &command_counter, &executed_undos, &curr_snap);
                 } else if(redo_count > 0 && undo_count < redo_count) {
-                    handle_temp_redo(linesStack, &delList, cmdHead, undoHead, redo_count - undo_count);
-                }*/
+                    handle_redo(snapshots, editor, commandWrap, redo_count - undo_count, snap_size, &command_counter, &curr_snap);
+                    // shift command counter
+                    executed_undos -= redo_count - undo_count;
+                }
                 undo_count = 0;
                 redo_count = 0;
                 handle_print(editor, curr_cmd->args[0], curr_cmd->args[1]);
                 break;
             case DELETE:
+                if(undo_count > redo_count) {
+                    // permanent undo
+                    handle_undo(snapshots, editor, commandWrap, undo_count, redo_count, snap_size, &command_counter, &executed_undos, &curr_snap);
+                    make_permanent(snapshots, commandWrap, curr_snap, snap_size, command_counter - curr_snap);
+                    snap_size = curr_snap;
+                } else if(redo_count > 0 && undo_count < redo_count) {
+                    // permanent redo
+                    handle_redo(snapshots, editor, commandWrap, redo_count - undo_count, snap_size, &command_counter, &curr_snap);
+                    make_permanent(snapshots, commandWrap, curr_snap, snap_size, command_counter - curr_snap);
+                    snap_size = curr_snap;
+                } else if(executed_undos > 0) {
+                    make_permanent(snapshots, commandWrap, curr_snap, snap_size, command_counter - curr_snap);
+                    snap_size = curr_snap;
+                }
                 command_counter++;
                 snap_size++;
+                executed_undos = 0;
+                undo_count = 0;
+                redo_count = 0;
                 // resize snapshot structure if needed
                 if(snap_size >= snap_capacity) {
                     snapshots = (snapshot_t **) realloc(snapshots, (snap_size + INCREASE_CONST) * sizeof(snapshot_t *));
@@ -308,31 +506,16 @@ int main() {
                         snapshots[i] = (snapshot_t *) malloc(sizeof(snapshot_t));
                     }
                 }
-                snap_indexes->size++;
+                /*snap_indexes->size++;
                 // resize indexes structure if needed
                 if(snap_indexes->size >= snap_indexes->capacity) {
                     snap_indexes->array = (int *) realloc(snap_indexes->array, (snap_indexes->size + INCREASE_CONST) * sizeof(int));
                     snap_indexes->capacity = snap_indexes->size + INCREASE_CONST;
                 }
-                snap_indexes->array[snap_indexes->size] = command_counter;
+                snap_indexes->array[snap_indexes->size] = command_counter;*/
                 snapshots[snap_size]->index = command_counter;
+                curr_snap = snap_size;
                 handle_delete(editor, snapshots, snap_size, curr_cmd->args[0], curr_cmd->args[1]);
-
-                /*
-                if(undo_count > redo_count) {
-                    // permanent undo
-                    handle_perm_undo(linesStack, &delList, &cmdHead, &undoHead, undo_count - redo_count);
-                } else if(redo_count > 0 && undo_count < redo_count) {
-                    // permanent redo
-                    handle_temp_redo(linesStack, &delList, cmdHead, undoHead, redo_count - undo_count);
-                    make_permanent_undo(linesStack, &undoHead);
-                }
-                if(undoHead->size > 0) make_permanent_undo(linesStack, &undoHead);
-                undo_count = 0;
-                redo_count = 0;
-                handle_delete(linesStack, &delList, &curr_cmd->args[0] + (curr_cmd->args[0] <= 0 ? 1 : 0), &curr_cmd->args[1]);
-                if(delList->linesStack->index == -1) curr_cmd->args[1] = -1;
-                push_cmd(&cmdHead, curr_cmd);*/
                 break;
             case UNDO:
                 undo_count += curr_cmd->args[0];
