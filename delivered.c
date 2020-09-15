@@ -1,72 +1,3 @@
-/**
-██╗    ██╗███████╗██╗      ██████╗ ██████╗ ███╗   ███╗███████╗
-██║    ██║██╔════╝██║     ██╔════╝██╔═══██╗████╗ ████║██╔════╝
-██║ █╗ ██║█████╗  ██║     ██║     ██║   ██║██╔████╔██║█████╗
-██║███╗██║██╔══╝  ██║     ██║     ██║   ██║██║╚██╔╝██║██╔══╝
-╚███╔███╔╝███████╗███████╗╚██████╗╚██████╔╝██║ ╚═╝ ██║███████╗
- ╚══╝╚══╝ ╚══════╝╚══════╝ ╚═════╝ ╚═════╝ ╚═╝     ╚═╝╚══════╝
-
-████████╗ ██████╗
-╚══██╔══╝██╔═══██╗
-   ██║   ██║   ██║
-   ██║   ██║   ██║
-   ██║   ╚██████╔╝
-   ╚═╝    ╚═════╝
-
-███╗   ███╗██╗   ██╗     █████╗ ██████╗ ██╗    ██████╗ ██████╗  ██████╗      ██╗███████╗ ██████╗████████╗
-████╗ ████║╚██╗ ██╔╝    ██╔══██╗██╔══██╗██║    ██╔══██╗██╔══██╗██╔═══██╗     ██║██╔════╝██╔════╝╚══██╔══╝
-██╔████╔██║ ╚████╔╝     ███████║██████╔╝██║    ██████╔╝██████╔╝██║   ██║     ██║█████╗  ██║        ██║
-██║╚██╔╝██║  ╚██╔╝      ██╔══██║██╔═══╝ ██║    ██╔═══╝ ██╔══██╗██║   ██║██   ██║██╔══╝  ██║        ██║
-██║ ╚═╝ ██║   ██║       ██║  ██║██║     ██║    ██║     ██║  ██║╚██████╔╝╚█████╔╝███████╗╚██████╗   ██║
-╚═╝     ╚═╝   ╚═╝       ╚═╝  ╚═╝╚═╝     ╚═╝    ╚═╝     ╚═╝  ╚═╝ ╚═════╝  ╚════╝ ╚══════╝ ╚═════╝   ╚═╝
-
-
-Sponsored by Long Doge
-░░░░░░░░░░░░░░░░░░░░░░░
-░░░▄▄░░░░░░░░░░░▄▄░░░░░
-░░░█░▀▄░░░░░░░▄▀░█░░░░░
-░░░█░░░▀█▀▀▀▀█░░░█░░░░░
-░░▄▀░░░░▀░░░░░░░░░█░░░░
-░░█░░░░░░░░░░░░░░░░█░░░
-░▄▀░░░░░▄▄░░░░██░▄▄░█░░
-░█░░░▀▀░▀▀░░░░░░▄░░░░█░
-░█░░░░░░▄░░░███░░█░░░█░
-░█░░░░░░░█▄▄▄█▄▄▀░░░░█░
-░█░░░░░░▀▄▀█▀▀█▀░░░░░█░
-░█░░░░░░░░▀█▄▄▀░░░░░░█░
-░█░░░░░░░░░░░░░░░░░░░█░
-░█░░░░░░░░░░░░░░░░░░░█░
-░█░░░░░░░░░░░░░░░░░░░█░
-░█░░░░░░░░░░░░░░░░░░░█░
-░█░░░░░░░░░░░░░░░░░░░█░
-░█░░░░░░░░░░░░░░░░░░░█░
-░█░░░░░░░░░░░░░░░░░░░█░
-░█░░░░░░░░░░░░░░░░░░░█░
-░█░░░░░░░░░░░░░░░░░░░█░
-
- ░░░░░░░░░▄░░░░░░░░░░░░░░▄░░░░
-░░░░░░░░▌▒█░░░░░░░░░░░▄▀▒▌░░░
-░░░░░░░░▌▒▒█░░░░░░░░▄▀▒▒▒▐░░░
-░░░░░░░▐▄▀▒▒▀▀▀▀▄▄▄▀▒▒▒▒▒▐░░░
-░░░░░▄▄▀▒░▒▒▒▒▒▒▒▒▒█▒▒▄█▒▐░░░
-░░░▄▀▒▒▒░░░▒▒▒░░░▒▒▒▀██▀▒▌░░░
-░░▐▒▒▒▄▄▒▒▒▒░░░▒▒▒▒▒▒▒▀▄▒▒▌░░
-░░▌░░▌█▀▒▒▒▒▒▄▀█▄▒▒▒▒▒▒▒█▒▐░░
-░▐░░░▒▒▒▒▒▒▒▒▌██▀▒▒░░░▒▒▒▀▄▌░
-░▌░▒▄██▄▒▒▒▒▒▒▒▒▒░░░░░░▒▒▒▒▌░
-▀▒▀▐▄█▄█▌▄░▀▒▒░░░░░░░░░░▒▒▒▐░
-▐▒▒▐▀▐▀▒░▄▄▒▄▒▒▒▒▒▒░▒░▒░▒▒▒▒▌
-▐▒▒▒▀▀▄▄▒▒▒▄▒▒▒▒▒▒▒▒░▒░▒░▒▒▐░
-░▌▒▒▒▒▒▒▀▀▀▒▒▒▒▒▒░▒░▒░▒░▒▒▒▌░
-░▐▒▒▒▒▒▒▒▒▒▒▒▒▒▒░▒░▒░▒▒▄▒▒▐░░
-░░▀▄▒▒▒▒▒▒▒▒▒▒▒░▒░▒░▒▄▒▒▒▒▌░░
-░░░░▀▄▒▒▒▒▒▒▒▒▒▒▄▄▄▀▒▒▒▒▄▀░░░
-░░░░░░▀▄▄▄▄▄▄▀▀▀▒▒▒▒▒▄▄▀░░░░░
-░░░░░░░░░▒▒▒▒▒▒▒▒▒▒▀▀░░░░░░░░
-
- ok mi sentivo solo, era la mia unica compagnia durante le mie pesantissime sessioni di coding.
- Ringrazio il long doge e Cookie (il mio gatto) per questa struttura dati.
- */
 #include <stdio.h>
 #include <stdbool.h>
 #include <string.h>
@@ -111,6 +42,11 @@ typedef struct int_array_s {
     int *array;
 }int_array_t;
 
+/**
+ * create a new snapshot with editor content
+ * @param editor the main editor (not null)
+ * @param dest where to copy the editor (not null)
+ */
 void copy_editor(snapshot_t *editor, snapshot_t *dest) {
     dest->size = editor->size;
     dest->capacity = dest->size + CAPACITY_CONST;
@@ -123,6 +59,11 @@ void copy_editor(snapshot_t *editor, snapshot_t *dest) {
     }
 }
 
+/**
+ * copies dest content into the main editor object
+ * @param editor (not null)
+ * @param dest (not null)
+ */
 void pass_to_snapshot(snapshot_t *editor, snapshot_t *dest) {
     int size = dest->size;
     if(editor->capacity < dest->capacity) {
@@ -141,7 +82,7 @@ void pass_to_snapshot(snapshot_t *editor, snapshot_t *dest) {
 
 /**
  * Gets the target snapshot to return to.
- * @param snapshots
+ * @param snapshots (not null)
  * @param snap_size
  * @param target_command
  * @return the index of the snapshot to return to
@@ -159,7 +100,7 @@ int backward_search_snapshot(snapshot_t **snapshots, int snap_size, int target_c
 /**
  * Handles print. Iterates through the lines structure, if the line has null content it prints '.\n',
  *  else prints the line's content.
- * @param editor
+ * @param editor (not null)
  * @param arg1
  * @param arg2
  */
@@ -179,6 +120,11 @@ void handle_print(snapshot_t *editor, int arg1, int arg2) {
     }
 }
 
+/**
+ * Handle a change command. Put all new lines where they belong inside the editor.
+ * @param editor (not null)
+ * @param command (not null)
+ */
 void handle_change(snapshot_t *editor, command_t *command) {
     char *input;
     char buff[INPUT_MAX_LENGTH];
@@ -207,6 +153,11 @@ void handle_change(snapshot_t *editor, command_t *command) {
     getchar_unlocked();
 }
 
+/**
+ * Redo a change. Puts all the lines that have been inserted by the command back where they belong.
+ * @param editor (not null)
+ * @param command (not null)
+ */
 void redo_change(snapshot_t *editor, command_t *command) {
     int arg2 = command->arg2;
     int arg1 = command->arg1;
@@ -225,6 +176,16 @@ void redo_change(snapshot_t *editor, command_t *command) {
     }
 }
 
+/**
+ * Handle delete.
+ *      * create a new snapshot and copy the editor' content
+ *      * put the new snapshot into the main structure
+ * @param editor (not null)
+ * @param snapshot (not null)
+ * @param snap_size
+ * @param arg1
+ * @param arg2
+ */
 void handle_delete(snapshot_t *editor, snapshot_t **snapshot, int snap_size, int arg1, int arg2) {
     int from, to;
     if(arg1 <= 0) {
@@ -273,6 +234,18 @@ void handle_delete(snapshot_t *editor, snapshot_t **snapshot, int snap_size, int
     snapshot[snap_size]->capacity = editor->size;
 }
 
+/**
+ * Handle undo.
+ * @param snapshots (not null)
+ * @param editor (not null)
+ * @param commandWrap (not null)
+ * @param undo_count
+ * @param redo_count
+ * @param snap_size the amount of snapshots alloc'd in the main structure
+ * @param command_counter
+ * @param executed_undos the amount of temporary executed undos in the past
+ * @param curr_snap the index of the closest snapshot
+ */
 void handle_undo(snapshot_t **snapshots, snapshot_t *editor,  command_wrap_t *commandWrap, int undo_count, int redo_count, int snap_size, int *command_counter, int *executed_undos, int *curr_snap) {
     // find the right snapshot to jump back to
     int target;
@@ -292,6 +265,16 @@ void handle_undo(snapshot_t **snapshots, snapshot_t *editor,  command_wrap_t *co
     *executed_undos += undo_count - redo_count;
 }
 
+/**
+ * Handle redo.
+ * @param snapshots (not null)
+ * @param editor (not null)
+ * @param commandWrap (not null)
+ * @param steps amount of steps to redo
+ * @param snap_size the amount of snapshots alloc'd in the main structure
+ * @param command_counter
+ * @param curr_snap the index of the closest snapshot
+ */
 void handle_redo(snapshot_t **snapshots, snapshot_t *editor,  command_wrap_t *commandWrap, int steps, int snap_size, int *command_counter, int *curr_snap) {
     // find right snapshot to jump forward to (if needed)
     int target = backward_search_snapshot(snapshots, snap_size, *command_counter + (steps));
@@ -307,6 +290,14 @@ void handle_redo(snapshot_t **snapshots, snapshot_t *editor,  command_wrap_t *co
     }
 }
 
+/**
+ * Make a change or a delete permanent by deleting all current history.
+ * @param snapshots  (not null)
+ * @param commandWrap  (not null)
+ * @param curr_snap
+ * @param snap_size
+ * @param curr_change index of the last usable change
+ */
 void make_permanent(snapshot_t **snapshots, command_wrap_t *commandWrap, int curr_snap, int snap_size, int curr_change) {
     // delete all snapshots with index > curr_snap
     for(int i = curr_snap + 1; i <= snap_size; i++) {

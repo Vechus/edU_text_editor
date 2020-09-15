@@ -3,18 +3,6 @@
 #include <string.h>
 #include <stdlib.h>
 
-/**
- * IDEA: potrei mantenere ogni deleted chunk all'interno della struttura,
- *  aggiungendo un campo `jump_to` ad ogni elemento eliminato.
- *      PRO: velocizzare la delete, e di molto (no memcpy e niente shift)
- *      CON: pochissimo più overhead e complicattezza nelle change e print;
-            con tante delete la complessità potrebbe essere eccessivamente alta?
-            In caso ci fossero N operazioni di delete atomiche e consecutive ogni change/print/undo/redo costa O(N) goddammit
- *      UNCHANGED: consumo di memoria rimane lo stesso (in realtà aumenta l'uso di 4/8 byte per ogni linea),
-            stessa complessità spaziale e temporale
-*/
-
-// TODO: fix duplicating pointers!
 
 #define INPUT_MAX_LENGTH 1025
 #define CAPACITY_CONST 10000
@@ -128,7 +116,6 @@ void move_cmd(cmd_head_t* from, cmd_head_t* to) {
  * @param cmd the undo command structure *content* (not the head)
  */
 void clear_undo_stack(cmd_stack_node_t** command) {
-    // FIXME AIUTO LA FREE
     (*command)->command = (cmd *) malloc(sizeof(cmd));
     (*command)->command->type = BOTTOM;
     (*command)->next = NULL;
@@ -435,7 +422,6 @@ void pop_cmd_free(cmd_head_t** cmdHead) {
     cmd_stack_node_t* tmp = (*cmdHead)->head;
     (*cmdHead)->head = (*cmdHead)->head->next;
     (*cmdHead)->size--;
-    // FIXME AIUTO LA FREE
     //free(tmp->command);
     //free(tmp);
 }
